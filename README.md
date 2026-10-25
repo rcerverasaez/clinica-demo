@@ -13,8 +13,8 @@ Demo de una clínica para el curso de introducción a la IA. **Todos los datos s
 
 ## Requisitos
 
-- JDK 17 o superior.
-- Maven 3.9 o superior (o el wrapper `./mvnw` que incluye el proyecto).
+- JDK 17 o superior. Comprueba la versión con `java -version`. Si tienes varios JDK instalados, apunta `JAVA_HOME` a uno de 17 o más antes de lanzar Maven.
+- No hace falta instalar Maven: `./mvnw` descarga la versión que usa el proyecto la primera vez.
 
 ## Cómo se usa
 
