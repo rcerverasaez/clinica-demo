@@ -17,7 +17,7 @@ public class DocumentService {
 
     static final long MAX_BYTES = 2L * 1024 * 1024;
     private static final Set<String> TYPES = Set.of("application/pdf", "image/jpeg", "image/png");
-    private static final String NOT_FOUND = "El documento no existe.";
+    private static final String NOT_FOUND = "document.notfound";
 
     private final DocumentRepository documents;
     private final AppointmentService appointments;
@@ -33,13 +33,13 @@ public class DocumentService {
             String uploadedBy) {
         Appointment appointment = appointments.get(appointmentId);
         if (content.length == 0) {
-            throw new BookingException("El archivo está vacío.");
+            throw new BookingException("document.empty");
         }
         if (content.length > MAX_BYTES) {
-            throw new BookingException("El archivo no puede superar 2 MB.");
+            throw new BookingException("document.too-large");
         }
         if (!TYPES.contains(contentType)) {
-            throw new BookingException("Solo se admiten archivos PDF, JPG o PNG.");
+            throw new BookingException("document.type");
         }
         return documents.save(new Document(appointment, cleanName(fileName), contentType, content, uploadedBy,
                 LocalDateTime.now(clock)));

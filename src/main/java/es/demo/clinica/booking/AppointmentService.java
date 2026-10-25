@@ -39,9 +39,9 @@ public class AppointmentService {
 
     public Appointment book(BookingForm form) {
         Treatment treatment = catalog.treatment(form.getTreatmentId())
-                .orElseThrow(() -> new BookingException("La consulta elegida no existe."));
+                .orElseThrow(() -> new BookingException("booking.treatment.unknown"));
         Specialist specialist = catalog.specialist(form.getSpecialistId())
-                .orElseThrow(() -> new BookingException("El especialista elegido no existe."));
+                .orElseThrow(() -> new BookingException("booking.specialist.unknown"));
 
         LocalDateTime start = form.getStart();
         LocalDateTime end = start.plusMinutes(treatment.getDurationMinutes());
@@ -92,12 +92,12 @@ public class AppointmentService {
     @Transactional(readOnly = true)
     public Appointment findByCode(String code) {
         return repository.findByCode(normalizeCode(code))
-                .orElseThrow(() -> new BookingException("No encontramos ninguna cita con ese código."));
+                .orElseThrow(() -> new BookingException("booking.code.notfound"));
     }
 
     @Transactional(readOnly = true)
     public Appointment get(String id) {
-        return repository.findById(id).orElseThrow(() -> new BookingException("La cita no existe."));
+        return repository.findById(id).orElseThrow(() -> new BookingException("booking.appointment.notfound"));
     }
 
     /** Cancelar lo cambia a CANCELADA: la cita se conserva para el historial. */
@@ -110,7 +110,7 @@ public class AppointmentService {
         Appointment appointment = findByCode(code);
         if (appointment.getStatus() != AppointmentStatus.CONFIRMADA
                 || !appointment.getStartAt().isAfter(LocalDateTime.now(clock))) {
-            throw new BookingException("Esta cita ya no se puede cancelar.");
+            throw new BookingException("booking.cancel.notallowed");
         }
         appointment.changeStatus(AppointmentStatus.CANCELADA);
         return appointment;
@@ -119,21 +119,21 @@ public class AppointmentService {
     /** Recepción o especialista marcan la cita como atendida o como no presentada. */
     public void changeStatus(String id, AppointmentStatus status) {
         if (status == AppointmentStatus.CONFIRMADA || status == AppointmentStatus.CANCELADA) {
-            throw new BookingException("Ese estado no se puede asignar desde la agenda.");
+            throw new BookingException("booking.status.notallowed");
         }
         Appointment appointment = repository.findById(id)
-                .orElseThrow(() -> new BookingException("La cita no existe."));
+                .orElseThrow(() -> new BookingException("booking.appointment.notfound"));
         if (appointment.getStatus() != AppointmentStatus.CONFIRMADA) {
-            throw new BookingException("Solo se puede cambiar el estado de una cita confirmada.");
+            throw new BookingException("booking.status.notconfirmed");
         }
         appointment.changeStatus(status);
     }
 
     public Absence addAbsence(String specialistId, LocalDateTime start, LocalDateTime end, String reason) {
         Specialist specialist = catalog.specialist(specialistId)
-                .orElseThrow(() -> new BookingException("El especialista elegido no existe."));
+                .orElseThrow(() -> new BookingException("booking.specialist.unknown"));
         if (!end.isAfter(start)) {
-            throw new BookingException("La ausencia tiene que terminar después de empezar.");
+            throw new BookingException("booking.absence.order");
         }
         return absences.save(new Absence(specialist, start, end, reason.trim()));
     }
@@ -150,29 +150,29 @@ public class AppointmentService {
 
     private void validateSchedule(LocalDateTime start, LocalDateTime end) {
         if (!start.isAfter(LocalDateTime.now(clock))) {
-            throw new BookingException("La cita tiene que ser en el futuro.");
+            throw new BookingException("booking.rule.future");
         }
         if (start.getMinute() % SLOT_MINUTES != 0) {
-            throw new BookingException("Las citas empiezan en punto o y media.");
+            throw new BookingException("booking.rule.grid");
         }
         DayOfWeek day = start.getDayOfWeek();
         if (day == DayOfWeek.SATURDAY || day == DayOfWeek.SUNDAY) {
-            throw new BookingException("No abrimos los fines de semana.");
+            throw new BookingException("booking.rule.weekend");
         }
         boolean endsSameDay = end.toLocalDate().equals(start.toLocalDate());
         if (start.toLocalTime().isBefore(OPENING) || !endsSameDay
                 || end.toLocalTime().isAfter(CLOSING)) {
-            throw new BookingException("La cita tiene que caber en el horario de 9:00 a 18:00.");
+            throw new BookingException("booking.rule.hours");
         }
     }
 
     private void validateFreeSlot(Specialist specialist, LocalDateTime start, LocalDateTime end) {
         if (repository.existsBySpecialistIdAndStatusAndStartAtLessThanAndEndAtGreaterThan(
                 specialist.getId(), AppointmentStatus.CONFIRMADA, end, start)) {
-            throw new BookingException("Ese hueco ya está ocupado para este especialista.");
+            throw new BookingException("booking.rule.overlap");
         }
         if (absences.existsBySpecialistIdAndStartAtLessThanAndEndAtGreaterThan(specialist.getId(), end, start)) {
-            throw new BookingException("El especialista no atiende en ese horario.");
+            throw new BookingException("booking.rule.absence");
         }
     }
 

@@ -1,24 +1,26 @@
 <!DOCTYPE html>
-<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<html th:lang="${#locale.language}" xmlns:th="http://www.thymeleaf.org">
 <head th:fragment="head(title)">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title th:text="${title} + ' · Clínica Demo'">Clínica Demo</title>
+    <title th:text="${title} + ' · ' + ${#messages.msg('app.name')}">Clínica Demo</title>
     <link rel="stylesheet" th:href="@{/css/app.css}">
 </head>
 <body>
 <header class="top" th:fragment="nav">
-    <a class="brand" th:href="@{/}">Clínica <span>Demo</span></a>
+    <a class="brand" th:href="@{/}" th:utext="#{app.brand}">Clínica <span>Demo</span></a>
     <nav>
-        <a th:href="@{/}">Inicio</a>
-        <a th:href="@{/reservar}">Reservar cita</a>
-        <a th:href="@{/mis-citas}">Mis citas</a>
-        <a th:href="@{/recepcion}">Recepción</a>
-        <a th:if="${loggedIn}" th:href="@{/agenda}">Agenda</a>
+        <a th:href="@{/}" th:text="#{nav.home}">Inicio</a>
+        <a th:href="@{/reservar}" th:text="#{nav.book}">Reservar cita</a>
+        <a th:href="@{/mis-citas}" th:text="#{nav.appointments}">Mis citas</a>
+        <a th:href="@{/recepcion}" th:text="#{nav.reception}">Recepción</a>
+        <a th:if="${loggedIn}" th:href="@{/agenda}" th:text="#{nav.agenda}">Agenda</a>
         <form th:if="${loggedIn}" method="post" th:action="@{/logout}" class="inline">
-            <button class="link" type="submit">Salir</button>
+            <button class="link" type="submit" th:text="#{nav.logout}">Salir</button>
         </form>
-        <a th:if="${!loggedIn}" th:href="@{/login}">Acceso personal</a>
+        <a th:if="${!loggedIn}" th:href="@{/login}" th:text="#{nav.login}">Acceso personal</a>
+        <a th:if="${#locale.language == 'es'}" th:href="'?lang=en'">English</a>
+        <a th:unless="${#locale.language == 'es'}" th:href="'?lang=es'">Español</a>
     </nav>
 </header>
 </body>

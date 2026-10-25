@@ -39,7 +39,7 @@ public class ReceptionController {
     @PostMapping("/recepcion/{id}/cancelar")
     public String cancel(@PathVariable String id, Principal principal) {
         appointments.cancel(id);
-        audit.record(principal.getName(), AuditAction.CANCELLATION, id, "Cancelada desde recepción");
+        audit.record(principal.getName(), AuditAction.CANCELLATION, id, "audit.detail.reception-cancel");
         return "redirect:/recepcion";
     }
 
@@ -61,7 +61,7 @@ public class ReceptionController {
             RedirectAttributes redirect) {
         try {
             messages.send(id, MessageAuthor.RECEPCION, body);
-            audit.record(principal.getName(), AuditAction.MESSAGE, id, "Respuesta de recepción");
+            audit.record(principal.getName(), AuditAction.MESSAGE, id, "audit.detail.reception-message");
         } catch (BookingException e) {
             redirect.addFlashAttribute("bookingError", e.getMessage());
         }

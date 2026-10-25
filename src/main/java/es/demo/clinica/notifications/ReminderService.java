@@ -55,7 +55,7 @@ public class ReminderService {
             sent++;
         }
         if (sent > 0) {
-            audit.record(AuditService.SYSTEM_ACTOR, AuditAction.REMINDERS, null, "Recordatorios nuevos: " + sent);
+            audit.record(AuditService.SYSTEM_ACTOR, AuditAction.REMINDERS, null, "audit.detail.reminders");
         }
         return sent;
     }

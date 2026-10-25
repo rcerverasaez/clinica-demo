@@ -60,7 +60,7 @@ public class BookingController {
         }
         try {
             Appointment appointment = appointments.book(form);
-            audit.record(AuditService.PUBLIC_ACTOR, AuditAction.BOOKING, appointment.getId(), "Reserva desde la web");
+            audit.record(AuditService.PUBLIC_ACTOR, AuditAction.BOOKING, appointment.getId(), "audit.detail.web-booking");
             redirect.addFlashAttribute("confirmed", appointment);
             return "redirect:/reservar";
         } catch (BookingException e) {

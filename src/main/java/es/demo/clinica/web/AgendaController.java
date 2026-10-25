@@ -55,7 +55,7 @@ public class AgendaController {
         redirect.addAttribute("date", date);
         try {
             appointments.changeStatus(id, status);
-            audit.record(principal.getName(), AuditAction.STATUS_CHANGE, id, "Nuevo estado: " + status.name());
+            audit.record(principal.getName(), AuditAction.STATUS_CHANGE, id, "audit.detail.status." + status.name());
         } catch (BookingException e) {
             redirect.addFlashAttribute("bookingError", e.getMessage());
         }
@@ -69,8 +69,8 @@ public class AgendaController {
             @RequestParam String reason, Principal principal, RedirectAttributes redirect) {
         try {
             appointments.addAbsence(specialistId, start, end, reason);
-            audit.record(principal.getName(), AuditAction.ABSENCE, specialistId, "Ausencia registrada");
-            redirect.addFlashAttribute("message", "Ausencia registrada.");
+            audit.record(principal.getName(), AuditAction.ABSENCE, specialistId, "audit.detail.absence");
+            redirect.addFlashAttribute("message", "message.absence-saved");
         } catch (BookingException e) {
             redirect.addFlashAttribute("bookingError", e.getMessage());
         }
@@ -96,12 +96,12 @@ public class AgendaController {
         try {
             documents.upload(id, file.getOriginalFilename(), file.getContentType(), file.getBytes(),
                     principal.getName());
-            audit.record(principal.getName(), AuditAction.DOCUMENT_UPLOAD, id, "Documento adjunto");
-            redirect.addFlashAttribute("message", "Documento subido.");
+            audit.record(principal.getName(), AuditAction.DOCUMENT_UPLOAD, id, "audit.detail.document");
+            redirect.addFlashAttribute("message", "message.document-saved");
         } catch (BookingException e) {
             redirect.addFlashAttribute("bookingError", e.getMessage());
         } catch (IOException e) {
-            redirect.addFlashAttribute("bookingError", "No se pudo leer el archivo.");
+            redirect.addFlashAttribute("bookingError", "document.read-error");
         }
         return "redirect:/agenda/citas/" + id;
     }

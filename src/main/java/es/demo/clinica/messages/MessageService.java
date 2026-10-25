@@ -30,10 +30,10 @@ public class MessageService {
         Appointment appointment = appointments.get(appointmentId);
         String text = body == null ? "" : body.trim();
         if (text.isEmpty()) {
-            throw new BookingException("El mensaje no puede estar vacío.");
+            throw new BookingException("message.empty");
         }
         if (text.length() > MAX_LENGTH) {
-            throw new BookingException("El mensaje no puede superar 500 caracteres.");
+            throw new BookingException("message.too-long");
         }
         return messages.save(new Message(appointment, author, text, LocalDateTime.now(clock)));
     }

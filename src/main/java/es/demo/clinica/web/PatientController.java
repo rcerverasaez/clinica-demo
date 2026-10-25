@@ -10,6 +10,8 @@ import es.demo.clinica.documents.DocumentService;
 import es.demo.clinica.messages.MessageAuthor;
 import es.demo.clinica.messages.MessageService;
 import java.nio.charset.StandardCharsets;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.ContentDisposition;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -33,13 +35,15 @@ public class PatientController {
     private final DocumentService documents;
     private final MessageService messages;
     private final AuditService audit;
+    private final MessageSource messageSource;
 
     public PatientController(AppointmentService appointments, DocumentService documents, MessageService messages,
-            AuditService audit) {
+            AuditService audit, MessageSource messageSource) {
         this.appointments = appointments;
         this.documents = documents;
         this.messages = messages;
         this.audit = audit;
+        this.messageSource = messageSource;
     }
 
     @GetMapping("/mis-citas")
@@ -67,8 +71,8 @@ public class PatientController {
             Appointment appointment = appointments.findByCode(codigo);
             appointments.cancelByCode(codigo);
             audit.record(AuditService.PATIENT_ACTOR, AuditAction.CANCELLATION, appointment.getId(),
-                    "Cancelada por el paciente");
-            model.addAttribute("message", "Tu cita se ha cancelado.");
+                    "audit.detail.patient-cancel");
+            model.addAttribute("message", "message.patient-cancelled");
         } catch (BookingException e) {
             model.addAttribute("bookingError", e.getMessage());
         }
@@ -80,8 +84,9 @@ public class PatientController {
         try {
             Appointment appointment = appointments.findByCode(codigo);
             messages.send(appointment.getId(), MessageAuthor.PACIENTE, body);
-            audit.record(AuditService.PATIENT_ACTOR, AuditAction.MESSAGE, appointment.getId(), "Mensaje del paciente");
-            model.addAttribute("message", "Mensaje enviado a recepción.");
+            audit.record(AuditService.PATIENT_ACTOR, AuditAction.MESSAGE, appointment.getId(),
+                    "audit.detail.patient-message");
+            model.addAttribute("message", "message.sent");
         } catch (BookingException e) {
             model.addAttribute("bookingError", e.getMessage());
         }
@@ -100,7 +105,8 @@ public class PatientController {
         } catch (BookingException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .contentType(MediaType.TEXT_PLAIN)
-                    .body(e.getMessage().getBytes(StandardCharsets.UTF_8));
+                    .body(messageSource.getMessage(e.getMessage(), null, LocaleContextHolder.getLocale())
+                            .getBytes(StandardCharsets.UTF_8));
         }
     }
 }

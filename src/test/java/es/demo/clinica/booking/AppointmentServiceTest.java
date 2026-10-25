@@ -38,7 +38,7 @@ class AppointmentServiceTest {
 
         BookingException error = assertThrows(BookingException.class,
                 () -> service.book(form("primera-visita", "ana-lopez", "2030-01-07T10:30")));
-        assertEquals("Ese hueco ya está ocupado para este especialista.", error.getMessage());
+        assertEquals("booking.rule.overlap", error.getMessage());
     }
 
     @Test
@@ -111,7 +111,7 @@ class AppointmentServiceTest {
 
         BookingException error = assertThrows(BookingException.class,
                 () -> service.book(form("primera-visita", "ana-lopez", "2030-01-07T10:00")));
-        assertEquals("El especialista no atiende en ese horario.", error.getMessage());
+        assertEquals("booking.rule.absence", error.getMessage());
     }
 
     @Test

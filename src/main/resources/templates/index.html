@@ -1,30 +1,30 @@
 <!DOCTYPE html>
-<html lang="es" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments/layout :: head('Inicio')}"></head>
+<html th:lang="${#locale.language}" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head(#{title.home})}"></head>
 <body>
 <header class="top" th:replace="~{fragments/layout :: nav}"></header>
 
 <main>
     <section class="hero">
-        <p class="eyebrow">Datos ficticios · proyecto de formación</p>
-        <h1>Reserva tu cita en unos minutos</h1>
-        <p class="lead">Elige la consulta, el especialista y el hueco que mejor te encaje. Abrimos de lunes a viernes, de 9:00 a 18:00.</p>
-        <a class="btn" th:href="@{/reservar}">Reservar cita</a>
+        <p class="eyebrow" th:text="#{home.eyebrow}">Datos ficticios · proyecto de formación</p>
+        <h1 th:text="#{home.title}">Reserva tu cita en unos minutos</h1>
+        <p class="lead" th:text="#{home.lead}">Elige la consulta, el especialista y el hueco que mejor te encaje. Abrimos de lunes a viernes, de 9:00 a 18:00.</p>
+        <a class="btn" th:href="@{/reservar}" th:text="#{home.book}">Reservar cita</a>
     </section>
 
     <section>
-        <h2>Consultas</h2>
+        <h2 th:text="#{home.treatments}">Consultas</h2>
         <div class="grid">
             <article class="card" th:each="t : ${treatments}">
                 <h3 th:text="${t.name}">Consulta</h3>
-                <p class="meta" th:text="${t.durationMinutes} + ' min'">30 min</p>
+                <p class="meta" th:text="#{home.minutes(${t.durationMinutes})}">30 min</p>
                 <p class="price" th:text="${#strings.concat(t.price, ' €')}">60,00 €</p>
             </article>
         </div>
     </section>
 
     <section>
-        <h2>Especialistas</h2>
+        <h2 th:text="#{home.specialists}">Especialistas</h2>
         <div class="grid">
             <article class="card" th:each="s : ${specialists}">
                 <h3 th:text="${s.name}">Especialista</h3>

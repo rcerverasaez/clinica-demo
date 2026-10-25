@@ -1,27 +1,27 @@
 <!DOCTYPE html>
-<html lang="es" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments/layout :: head('Acceso')}"></head>
+<html th:lang="${#locale.language}" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head(#{title.login})}"></head>
 <body>
 <header class="top" th:replace="~{fragments/layout :: nav}"></header>
 
 <main class="narrow">
-    <h1>Acceso del personal</h1>
+    <h1 th:text="#{login.title}">Acceso del personal</h1>
 
-    <div class="alert error" th:if="${param.error}">Usuario o contraseña incorrectos.</div>
-    <div class="alert ok" th:if="${param.logout}">Has cerrado sesión.</div>
+    <div class="alert error" th:if="${param.error}" th:text="#{login.error}">Usuario o contraseña incorrectos.</div>
+    <div class="alert ok" th:if="${param.logout}" th:text="#{login.logged-out}">Has cerrado sesión.</div>
 
     <form class="form" method="post" th:action="@{/login}">
         <label>
-            Usuario
+            <span th:text="#{login.user}">Usuario</span>
             <input type="text" name="username" autocomplete="username" required>
         </label>
         <label>
-            Contraseña
+            <span th:text="#{login.password}">Contraseña</span>
             <input type="password" name="password" autocomplete="current-password" required>
         </label>
-        <button class="btn" type="submit">Entrar</button>
+        <button class="btn" type="submit" th:text="#{login.submit}">Entrar</button>
     </form>
-    <p class="hint">Cuentas de demo: <code>recepcion</code> y <code>especialista</code>. Las contraseñas están en el README.</p>
+    <p class="hint" th:utext="#{login.hint}">Cuentas de demo: <code>recepcion</code> y <code>especialista</code>. Las contraseñas están en el README.</p>
 </main>
 </body>
 </html>

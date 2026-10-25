@@ -1,34 +1,34 @@
 <!DOCTYPE html>
-<html lang="es" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments/layout :: head('Auditoría')}"></head>
+<html th:lang="${#locale.language}" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head(#{title.audit})}"></head>
 <body>
 <header class="top" th:replace="~{fragments/layout :: nav}"></header>
 
 <main>
-    <p><a th:href="@{/recepcion}">← Volver a citas próximas</a></p>
-    <h1>Registro de acciones</h1>
-    <p class="hint">Últimas 200 acciones. El detalle no incluye nombres, correos ni códigos de cita.</p>
+    <p><a th:href="@{/recepcion}" th:text="#{common.back-upcoming}">← Volver a citas próximas</a></p>
+    <h1 th:text="#{audit.title}">Registro de acciones</h1>
+    <p class="hint" th:text="#{audit.hint}">Últimas 200 acciones. El detalle no incluye nombres, correos ni códigos de cita.</p>
 
-    <p class="empty" th:if="${events.isEmpty()}">Todavía no hay acciones registradas.</p>
+    <p class="empty" th:if="${events.isEmpty()}" th:text="#{audit.empty}">Todavía no hay acciones registradas.</p>
 
     <div class="table-wrap" th:unless="${events.isEmpty()}">
         <table>
             <thead>
             <tr>
-                <th>Cuándo</th>
-                <th>Quién</th>
-                <th>Acción</th>
-                <th>Objetivo</th>
-                <th>Detalle</th>
+                <th th:text="#{audit.when}">Cuándo</th>
+                <th th:text="#{audit.who}">Quién</th>
+                <th th:text="#{audit.action}">Acción</th>
+                <th th:text="#{audit.target}">Objetivo</th>
+                <th th:text="#{audit.detail}">Detalle</th>
             </tr>
             </thead>
             <tbody>
             <tr th:each="e : ${events}">
                 <td th:text="${#temporals.format(e.occurredAt, 'dd/MM HH:mm:ss')}">01/01 10:00:00</td>
-                <td th:text="${e.actor}">recepcion</td>
-                <td th:text="${e.type.label}">Reserva</td>
+                <td th:text="${#messages.msgOrNull('actor.' + e.actor) ?: e.actor}">recepcion</td>
+                <td th:text="#{${'audit.action.' + e.type.name()}}">Reserva</td>
                 <td class="code" th:text="${e.target}">cita</td>
-                <td th:text="${e.detail}">Detalle</td>
+                <td th:text="${#messages.msgOrNull(e.detail) ?: e.detail}">Detalle</td>
             </tr>
             </tbody>
         </table>

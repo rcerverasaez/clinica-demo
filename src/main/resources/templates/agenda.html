@@ -1,34 +1,34 @@
 <!DOCTYPE html>
-<html lang="es" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments/layout :: head('Agenda')}"></head>
+<html th:lang="${#locale.language}" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head(#{title.agenda})}"></head>
 <body>
 <header class="top" th:replace="~{fragments/layout :: nav}"></header>
 
 <main>
-    <h1>Agenda del día</h1>
+    <h1 th:text="#{agenda.title}">Agenda del día</h1>
 
-    <div class="alert ok" th:if="${message}" th:text="${message}">Mensaje</div>
-    <div class="alert error" th:if="${bookingError}" th:text="${bookingError}">Error</div>
+    <div class="alert ok" th:if="${message}" th:text="#{${message}}">Mensaje</div>
+    <div class="alert error" th:if="${bookingError}" th:text="#{${bookingError}}">Error</div>
 
     <form class="form" method="get" th:action="@{/agenda}">
         <label>
-            Día
+            <span th:text="#{common.day}">Día</span>
             <input type="date" name="date" th:value="${date}">
         </label>
-        <button class="btn ghost" type="submit">Ver día</button>
+        <button class="btn ghost" type="submit" th:text="#{agenda.view}">Ver día</button>
     </form>
 
-    <p class="empty" th:if="${#lists.isEmpty(appointments)}">No hay citas este día.</p>
+    <p class="empty" th:if="${#lists.isEmpty(appointments)}" th:text="#{agenda.empty}">No hay citas este día.</p>
 
     <div class="table-wrap" th:unless="${#lists.isEmpty(appointments)}">
         <table>
             <thead>
             <tr>
-                <th>Hora</th>
-                <th>Consulta</th>
-                <th>Especialista</th>
-                <th>Paciente</th>
-                <th>Estado</th>
+                <th th:text="#{common.time}">Hora</th>
+                <th th:text="#{common.treatment}">Consulta</th>
+                <th th:text="#{common.specialist}">Especialista</th>
+                <th th:text="#{common.patient}">Paciente</th>
+                <th th:text="#{common.status}">Estado</th>
                 <th></th>
             </tr>
             </thead>
@@ -38,14 +38,14 @@
                 <td th:text="${a.treatment.name}">Consulta</td>
                 <td th:text="${a.specialist.name}">Especialista</td>
                 <td th:text="${a.patientName}">Paciente</td>
-                <td th:text="${a.status}">CONFIRMADA</td>
+                <td th:text="#{${'status.' + a.status.name()}}">Confirmada</td>
                 <td>
-                    <a class="meta" th:href="@{/agenda/citas/{id}(id=${a.id})}">Detalle</a>
+                    <a class="meta" th:href="@{/agenda/citas/{id}(id=${a.id})}" th:text="#{agenda.details}">Detalle</a>
                     <form th:if="${a.status.name() == 'CONFIRMADA'}" method="post"
                           th:action="@{/agenda/{id}/estado(id=${a.id})}">
                         <input type="hidden" name="date" th:value="${date}">
-                        <button class="btn ghost" type="submit" name="status" value="ATENDIDA">Atendida</button>
-                        <button class="btn ghost" type="submit" name="status" value="NO_PRESENTADO">No presentado</button>
+                        <button class="btn ghost" type="submit" name="status" value="ATENDIDA" th:text="#{status.ATENDIDA}">Atendida</button>
+                        <button class="btn ghost" type="submit" name="status" value="NO_PRESENTADO" th:text="#{status.NO_PRESENTADO}">No presentado</button>
                     </form>
                 </td>
             </tr>
@@ -54,27 +54,27 @@
     </div>
 
     <section class="card">
-        <h2>Registrar ausencia</h2>
+        <h2 th:text="#{agenda.absence-title}">Registrar ausencia</h2>
         <form class="form" method="post" th:action="@{/agenda/ausencias}">
             <label>
-                Especialista
+                <span th:text="#{common.specialist}">Especialista</span>
                 <select name="specialistId">
                     <option th:each="s : ${specialists}" th:value="${s.id}" th:text="${s.name}">Especialista</option>
                 </select>
             </label>
             <label>
-                Desde
+                <span th:text="#{agenda.absence-from}">Desde</span>
                 <input type="datetime-local" name="start" step="1800" required>
             </label>
             <label>
-                Hasta
+                <span th:text="#{agenda.absence-to}">Hasta</span>
                 <input type="datetime-local" name="end" step="1800" required>
             </label>
             <label>
-                Motivo
+                <span th:text="#{common.reason}">Motivo</span>
                 <input type="text" name="reason" maxlength="120" required>
             </label>
-            <button class="btn" type="submit">Guardar ausencia</button>
+            <button class="btn" type="submit" th:text="#{agenda.absence-save}">Guardar ausencia</button>
         </form>
     </section>
 </main>

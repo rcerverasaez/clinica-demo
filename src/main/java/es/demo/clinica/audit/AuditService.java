@@ -11,10 +11,11 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class AuditService {
 
-    public static final String PUBLIC_ACTOR = "público";
-    public static final String PATIENT_ACTOR = "paciente";
+    // Son claves de traducción (actor.NOMBRE): la vista del registro las muestra en el idioma del usuario.
+    public static final String PUBLIC_ACTOR = "public";
+    public static final String PATIENT_ACTOR = "patient";
     public static final String API_ACTOR = "api";
-    public static final String SYSTEM_ACTOR = "sistema";
+    public static final String SYSTEM_ACTOR = "system";
 
     private final AuditEventRepository events;
     private final Clock clock;

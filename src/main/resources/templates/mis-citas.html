@@ -1,39 +1,39 @@
 <!DOCTYPE html>
-<html lang="es" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments/layout :: head('Mis citas')}"></head>
+<html th:lang="${#locale.language}" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head(#{title.appointments})}"></head>
 <body>
 <header class="top" th:replace="~{fragments/layout :: nav}"></header>
 
 <main class="narrow">
-    <h1>Mis citas</h1>
-    <p class="hint">Introduce el código de 8 caracteres que recibiste al reservar.</p>
+    <h1 th:text="#{title.appointments}">Mis citas</h1>
+    <p class="hint" th:text="#{appointments.hint}">Introduce el código de 8 caracteres que recibiste al reservar.</p>
 
-    <div class="alert ok" th:if="${message}" th:text="${message}">Mensaje</div>
-    <div class="alert error" th:if="${bookingError}" th:text="${bookingError}">Error</div>
+    <div class="alert ok" th:if="${message}" th:text="#{${message}}">Mensaje</div>
+    <div class="alert error" th:if="${bookingError}" th:text="#{${bookingError}}">Error</div>
 
     <form class="form" method="post" th:action="@{/mis-citas}">
         <label>
-            Código de cita
+            <span th:text="#{appointments.code-label}">Código de cita</span>
             <input type="text" name="codigo" maxlength="8" required autocomplete="off" th:value="${codigo}">
         </label>
-        <button class="btn" type="submit">Buscar</button>
+        <button class="btn" type="submit" th:text="#{appointments.search}">Buscar</button>
     </form>
 
     <section class="card" th:if="${appointment}">
         <h2 th:text="${appointment.treatment.name}">Consulta</h2>
         <p>
             <span th:text="${#temporals.format(appointment.startAt, 'dd/MM/yyyy HH:mm')}">01/01/2030 10:00</span>
-            con <span th:text="${appointment.specialist.name}">Especialista</span>
+            <span th:text="#{book.with}">con</span> <span th:text="${appointment.specialist.name}">Especialista</span>
         </p>
-        <p class="meta">Estado: <strong th:text="${appointment.status}">CONFIRMADA</strong></p>
+        <p class="meta"><span th:text="#{common.status}">Estado</span>: <strong th:text="#{${'status.' + appointment.status.name()}}">Confirmada</strong></p>
 
         <form th:if="${appointment.status.name() == 'CONFIRMADA'}" method="post" th:action="@{/mis-citas/cancelar}">
             <input type="hidden" name="codigo" th:value="${appointment.code}">
-            <button class="btn ghost" type="submit">Cancelar cita</button>
+            <button class="btn ghost" type="submit" th:text="#{appointments.cancel}">Cancelar cita</button>
         </form>
 
         <div th:unless="${documents.isEmpty()}">
-            <h3>Documentos de tu cita</h3>
+            <h3 th:text="#{appointments.documents}">Documentos de tu cita</h3>
             <ul>
                 <li th:each="d : ${documents}">
                     <form method="post" th:action="@{/mis-citas/documentos/{id}(id=${d.id})}">
@@ -45,11 +45,11 @@
         </div>
 
         <div>
-            <h3>Mensajes a recepción</h3>
-            <p class="empty" th:if="${messages.isEmpty()}">Todavía no has escrito a recepción.</p>
+            <h3 th:text="#{appointments.messages}">Mensajes a recepción</h3>
+            <p class="empty" th:if="${messages.isEmpty()}" th:text="#{appointments.no-messages}">Todavía no has escrito a recepción.</p>
             <ul th:unless="${messages.isEmpty()}">
                 <li th:each="m : ${messages}">
-                    <strong th:text="${m.author.name() == 'PACIENTE' ? 'Tú' : 'Recepción'}">Tú</strong>
+                    <strong th:text="${m.author.name() == 'PACIENTE'} ? #{author.patient-you} : #{author.reception}">Tú</strong>
                     <small class="meta" th:text="${#temporals.format(m.createdAt, 'dd/MM HH:mm')}">01/01 10:00</small>
                     <p th:text="${m.body}">Mensaje</p>
                 </li>
@@ -57,10 +57,10 @@
             <form class="form" method="post" th:action="@{/mis-citas/mensajes}">
                 <input type="hidden" name="codigo" th:value="${appointment.code}">
                 <label>
-                    Escribe a recepción
+                    <span th:text="#{appointments.write}">Escribe a recepción</span>
                     <textarea name="body" rows="3" maxlength="500" required></textarea>
                 </label>
-                <button class="btn ghost" type="submit">Enviar mensaje</button>
+                <button class="btn ghost" type="submit" th:text="#{appointments.send}">Enviar mensaje</button>
             </form>
         </div>
     </section>

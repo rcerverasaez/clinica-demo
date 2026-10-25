@@ -1,51 +1,51 @@
 <!DOCTYPE html>
-<html lang="es" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments/layout :: head('Reservar cita')}"></head>
+<html th:lang="${#locale.language}" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head(#{title.book})}"></head>
 <body>
 <header class="top" th:replace="~{fragments/layout :: nav}"></header>
 
 <main class="narrow">
-    <h1>Reservar cita</h1>
+    <h1 th:text="#{book.title}">Reservar cita</h1>
 
     <div class="alert ok" th:if="${confirmed}">
-        <strong>Cita confirmada.</strong>
-        <span th:text="${#temporals.format(confirmed.startAt, 'dd/MM/yyyy HH:mm')} + ' · ' + ${confirmed.treatment.name} + ' con ' + ${confirmed.specialist.name}">Cita</span>.
-        Tu código es <strong class="code" th:text="${confirmed.code}">ABCD1234</strong>.
-        Guárdalo para consultar o cancelar tu cita en <a th:href="@{/mis-citas}">Mis citas</a>.
+        <strong th:text="#{book.confirmed}">Cita confirmada.</strong>
+        <span th:text="#{book.summary(${#temporals.format(confirmed.startAt, 'dd/MM/yyyy HH:mm')}, ${confirmed.treatment.name}, ${confirmed.specialist.name})}">Cita</span>.
+        <span th:text="#{book.your-code}">Tu código es</span> <strong class="code" th:text="${confirmed.code}">ABCD1234</strong>.
+        <span th:text="#{book.keep-code}">Guárdalo para consultar o cancelar tu cita en</span> <a th:href="@{/mis-citas}" th:text="#{nav.appointments}">Mis citas</a>.
     </div>
 
-    <div class="alert error" th:if="${bookingError}" th:text="${bookingError}">Error</div>
+    <div class="alert error" th:if="${bookingError}" th:text="#{${bookingError}}">Error</div>
 
-    <h2>1. Elige día y hueco</h2>
+    <h2 th:text="#{book.step1}">1. Elige día y hueco</h2>
     <form class="form" method="get" th:action="@{/reservar}">
         <label>
-            Consulta
+            <span th:text="#{common.treatment}">Consulta</span>
             <select name="treatmentId">
-                <option value="">Elige una consulta</option>
+                <option value="" th:text="#{book.pick-treatment}">Elige una consulta</option>
                 <option th:each="t : ${treatments}" th:value="${t.id}" th:selected="${t.id == form.treatmentId}"
-                        th:text="${t.name} + ' (' + ${t.durationMinutes} + ' min)'">Consulta</option>
+                        th:text="#{option.duration(${t.name}, ${t.durationMinutes})}">Consulta</option>
             </select>
         </label>
 
         <label>
-            Especialista
+            <span th:text="#{common.specialist}">Especialista</span>
             <select name="specialistId">
-                <option value="">Elige especialista</option>
+                <option value="" th:text="#{book.pick-specialist}">Elige especialista</option>
                 <option th:each="s : ${specialists}" th:value="${s.id}" th:selected="${s.id == form.specialistId}"
                         th:text="${s.name} + ' · ' + ${s.specialty}">Especialista</option>
             </select>
         </label>
 
         <label>
-            Día
+            <span th:text="#{common.day}">Día</span>
             <input type="date" name="date" th:value="${date}">
         </label>
 
-        <button class="btn ghost" type="submit">Ver huecos libres</button>
+        <button class="btn ghost" type="submit" th:text="#{book.search}">Ver huecos libres</button>
     </form>
 
     <div th:if="${slots != null}">
-        <p class="empty" th:if="${slots.isEmpty()}">No quedan huecos ese día. Prueba con otra fecha o especialista.</p>
+        <p class="empty" th:if="${slots.isEmpty()}" th:text="#{book.no-slots}">No quedan huecos ese día. Prueba con otra fecha o especialista.</p>
         <ul class="slots" th:unless="${slots.isEmpty()}">
             <li th:each="s : ${slots}">
                 <a class="btn ghost" th:href="@{/reservar(treatmentId=${form.treatmentId},specialistId=${form.specialistId},date=${date},start=${s})}"
@@ -54,22 +54,22 @@
         </ul>
     </div>
 
-    <h2>2. Tus datos</h2>
+    <h2 th:text="#{book.step2}">2. Tus datos</h2>
     <form class="form" method="post" th:action="@{/reservar}" th:object="${form}" novalidate>
         <label>
-            Consulta
+            <span th:text="#{common.treatment}">Consulta</span>
             <select th:field="*{treatmentId}">
-                <option value="">Elige una consulta</option>
+                <option value="" th:text="#{book.pick-treatment}">Elige una consulta</option>
                 <option th:each="t : ${treatments}" th:value="${t.id}"
-                        th:text="${t.name} + ' (' + ${t.durationMinutes} + ' min)'">Consulta</option>
+                        th:text="#{option.duration(${t.name}, ${t.durationMinutes})}">Consulta</option>
             </select>
             <small class="error-text" th:if="${#fields.hasErrors('treatmentId')}" th:errors="*{treatmentId}"></small>
         </label>
 
         <label>
-            Especialista
+            <span th:text="#{common.specialist}">Especialista</span>
             <select th:field="*{specialistId}">
-                <option value="">Elige especialista</option>
+                <option value="" th:text="#{book.pick-specialist}">Elige especialista</option>
                 <option th:each="s : ${specialists}" th:value="${s.id}"
                         th:text="${s.name} + ' · ' + ${s.specialty}">Especialista</option>
             </select>
@@ -77,25 +77,25 @@
         </label>
 
         <label>
-            Fecha y hora
+            <span th:text="#{book.datetime}">Fecha y hora</span>
             <input type="datetime-local" th:field="*{start}" step="1800">
-            <small class="hint">Citas en punto o y media, de lunes a viernes.</small>
+            <small class="hint" th:text="#{book.datetime-hint}">Citas en punto o y media, de lunes a viernes.</small>
             <small class="error-text" th:if="${#fields.hasErrors('start')}" th:errors="*{start}"></small>
         </label>
 
         <label>
-            Nombre
+            <span th:text="#{common.name}">Nombre</span>
             <input type="text" th:field="*{patientName}" maxlength="80" autocomplete="name">
             <small class="error-text" th:if="${#fields.hasErrors('patientName')}" th:errors="*{patientName}"></small>
         </label>
 
         <label>
-            Correo
+            <span th:text="#{common.email}">Correo</span>
             <input type="email" th:field="*{patientEmail}" autocomplete="email">
             <small class="error-text" th:if="${#fields.hasErrors('patientEmail')}" th:errors="*{patientEmail}"></small>
         </label>
 
-        <button class="btn" type="submit">Confirmar cita</button>
+        <button class="btn" type="submit" th:text="#{book.submit}">Confirmar cita</button>
     </form>
 </main>
 </body>

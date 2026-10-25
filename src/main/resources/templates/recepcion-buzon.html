@@ -1,30 +1,30 @@
 <!DOCTYPE html>
-<html lang="es" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments/layout :: head('Buzón de recordatorios')}"></head>
+<html th:lang="${#locale.language}" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head(#{title.outbox})}"></head>
 <body>
 <header class="top" th:replace="~{fragments/layout :: nav}"></header>
 
 <main>
-    <p><a th:href="@{/recepcion}">← Volver a citas próximas</a></p>
-    <h1>Buzón de recordatorios</h1>
-    <p class="hint">Simulación: los recordatorios se guardan aquí y no se envían por correo.</p>
+    <p><a th:href="@{/recepcion}" th:text="#{common.back-upcoming}">← Volver a citas próximas</a></p>
+    <h1 th:text="#{outbox.title}">Buzón de recordatorios</h1>
+    <p class="hint" th:text="#{outbox.hint}">Simulación: los recordatorios se guardan aquí y no se envían por correo.</p>
 
-    <div class="alert ok" th:if="${message}" th:text="${message}">Mensaje</div>
+    <div class="alert ok" th:if="${sent != null}" th:text="#{outbox.sent(${sent})}">Recordatorios nuevos en el buzón: 0.</div>
 
     <form method="post" th:action="@{/recepcion/buzon/enviar}">
-        <button class="btn ghost" type="submit">Preparar recordatorios ahora</button>
+        <button class="btn ghost" type="submit" th:text="#{outbox.prepare}">Preparar recordatorios ahora</button>
     </form>
 
-    <p class="empty" th:if="${notifications.isEmpty()}">El buzón está vacío.</p>
+    <p class="empty" th:if="${notifications.isEmpty()}" th:text="#{outbox.empty}">El buzón está vacío.</p>
 
     <div class="table-wrap" th:unless="${notifications.isEmpty()}">
         <table>
             <thead>
             <tr>
-                <th>Guardado</th>
-                <th>Destinatario</th>
-                <th>Asunto</th>
-                <th>Mensaje</th>
+                <th th:text="#{outbox.saved}">Guardado</th>
+                <th th:text="#{outbox.recipient}">Destinatario</th>
+                <th th:text="#{outbox.subject}">Asunto</th>
+                <th th:text="#{outbox.body}">Mensaje</th>
             </tr>
             </thead>
             <tbody>

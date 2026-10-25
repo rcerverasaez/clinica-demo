@@ -1,27 +1,27 @@
 <!DOCTYPE html>
-<html lang="es" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments/layout :: head('Mensajes de la cita')}"></head>
+<html th:lang="${#locale.language}" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head(#{title.reception-thread})}"></head>
 <body>
 <header class="top" th:replace="~{fragments/layout :: nav}"></header>
 
 <main class="narrow">
-    <p><a th:href="@{/recepcion}">← Volver a citas próximas</a></p>
-    <h1>Mensajes de la cita</h1>
+    <p><a th:href="@{/recepcion}" th:text="#{common.back-upcoming}">← Volver a citas próximas</a></p>
+    <h1 th:text="#{title.reception-thread}">Mensajes de la cita</h1>
     <p>
         <span th:text="${appointment.treatment.name}">Consulta</span>,
         <span th:text="${#temporals.format(appointment.startAt, 'dd/MM/yyyy HH:mm')}">01/01/2030 10:00</span>
         · <span th:text="${appointment.patientName}">Paciente</span>
-        · Código <strong class="code" th:text="${appointment.code}">ABCD1234</strong>
+        · <span th:text="#{common.code}">Código</span> <strong class="code" th:text="${appointment.code}">ABCD1234</strong>
     </p>
 
-    <div class="alert error" th:if="${bookingError}" th:text="${bookingError}">Error</div>
+    <div class="alert error" th:if="${bookingError}" th:text="#{${bookingError}}">Error</div>
 
     <section class="card">
-        <h2>Conversación</h2>
-        <p class="empty" th:if="${messages.isEmpty()}">Todavía no hay mensajes.</p>
+        <h2 th:text="#{reception.conversation}">Conversación</h2>
+        <p class="empty" th:if="${messages.isEmpty()}" th:text="#{reception.no-messages}">Todavía no hay mensajes.</p>
         <ul th:unless="${messages.isEmpty()}">
             <li th:each="m : ${messages}">
-                <strong th:text="${m.author.name() == 'PACIENTE' ? 'Paciente' : 'Recepción'}">Paciente</strong>
+                <strong th:text="${m.author.name() == 'PACIENTE'} ? #{author.patient} : #{author.reception}">Paciente</strong>
                 <small class="meta" th:text="${#temporals.format(m.createdAt, 'dd/MM HH:mm')}">01/01 10:00</small>
                 <p th:text="${m.body}">Mensaje</p>
             </li>
@@ -29,10 +29,10 @@
 
         <form class="form" method="post" th:action="@{/recepcion/citas/{id}/mensajes(id=${appointment.id})}">
             <label>
-                Responder
+                <span th:text="#{reception.reply}">Responder</span>
                 <textarea name="body" rows="3" maxlength="500" required></textarea>
             </label>
-            <button class="btn" type="submit">Enviar respuesta</button>
+            <button class="btn" type="submit" th:text="#{reception.send-reply}">Enviar respuesta</button>
         </form>
     </section>
 </main>

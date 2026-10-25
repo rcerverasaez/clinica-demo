@@ -1,21 +1,21 @@
 <!DOCTYPE html>
-<html lang="es" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments/layout :: head('Panel de recepción')}"></head>
+<html th:lang="${#locale.language}" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head(#{title.panel})}"></head>
 <body>
 <header class="top" th:replace="~{fragments/layout :: nav}"></header>
 
 <main>
-    <p><a th:href="@{/recepcion}">← Volver a citas próximas</a></p>
-    <h1>Panel</h1>
+    <p><a th:href="@{/recepcion}" th:text="#{common.back-upcoming}">← Volver a citas próximas</a></p>
+    <h1 th:text="#{panel.title}">Panel</h1>
 
     <section class="card">
-        <h2>Citas de los próximos 7 días</h2>
+        <h2 th:text="#{panel.next-week}">Citas de los próximos 7 días</h2>
         <div class="table-wrap">
             <table>
                 <thead>
                 <tr>
-                    <th>Día</th>
-                    <th>Citas</th>
+                    <th th:text="#{common.day}">Día</th>
+                    <th th:text="#{panel.count}">Citas</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -29,14 +29,14 @@
     </section>
 
     <section class="card">
-        <h2>Ocupación por especialista (7 días)</h2>
-        <p class="hint">Minutos reservados sobre el horario de lunes a viernes, de 9:00 a 18:00. No descuenta ausencias.</p>
+        <h2 th:text="#{panel.occupancy}">Ocupación por especialista (7 días)</h2>
+        <p class="hint" th:text="#{panel.occupancy-hint}">Minutos reservados sobre el horario de lunes a viernes, de 9:00 a 18:00. No descuenta ausencias.</p>
         <div class="table-wrap">
             <table>
                 <thead>
                 <tr>
-                    <th>Especialista</th>
-                    <th>Ocupación</th>
+                    <th th:text="#{common.specialist}">Especialista</th>
+                    <th th:text="#{panel.occupancy-col}">Ocupación</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -53,7 +53,7 @@
     </section>
 
     <section class="card">
-        <h2>No presentados (últimos 30 días)</h2>
+        <h2 th:text="#{panel.no-shows}">No presentados (últimos 30 días)</h2>
         <p class="stat" th:text="${panel.noShowsLast30Days}">0</p>
     </section>
 </main>

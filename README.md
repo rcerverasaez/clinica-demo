@@ -24,7 +24,7 @@ Arrancar la app:
 ./mvnw spring-boot:run
 ```
 
-Abrir http://localhost:8080 en el navegador.
+Abrir http://localhost:8080 en el navegador. La interfaz arranca en español; para verla en inglés, añade `?lang=en` a la dirección o pulsa el enlace *English* de la cabecera (`?lang=es` vuelve al español).
 
 Lanzar los tests:
 

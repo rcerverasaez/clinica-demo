@@ -51,7 +51,7 @@ public class AppointmentApiController {
     @Operation(summary = "Reserva una cita", description = "Devuelve 422 si la reserva incumple las reglas de la clínica.")
     public Appointment book(@Valid @RequestBody BookingForm form) {
         Appointment appointment = appointments.book(form);
-        audit.record(AuditService.API_ACTOR, AuditAction.BOOKING, appointment.getId(), "Reserva por API");
+        audit.record(AuditService.API_ACTOR, AuditAction.BOOKING, appointment.getId(), "audit.detail.api-booking");
         return appointment;
     }
 
@@ -66,6 +66,6 @@ public class AppointmentApiController {
     @Operation(summary = "Cancela una cita (solo recepción)")
     public void cancel(@PathVariable String id, Principal principal) {
         appointments.cancel(id);
-        audit.record(principal.getName(), AuditAction.CANCELLATION, id, "Cancelada por API");
+        audit.record(principal.getName(), AuditAction.CANCELLATION, id, "audit.detail.api-cancel");
     }
 }

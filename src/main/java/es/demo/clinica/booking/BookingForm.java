@@ -10,21 +10,21 @@ import org.springframework.format.annotation.DateTimeFormat;
 /** Datos que envía el formulario de reserva. */
 public class BookingForm {
 
-    @NotBlank(message = "Elige una consulta.")
+    @NotBlank
     private String treatmentId;
 
-    @NotBlank(message = "Elige un especialista.")
+    @NotBlank
     private String specialistId;
 
-    @NotBlank(message = "Escribe tu nombre.")
-    @Size(max = 80, message = "El nombre es demasiado largo.")
+    @NotBlank
+    @Size(max = 80)
     private String patientName;
 
-    @NotBlank(message = "Escribe tu correo.")
-    @Email(message = "El correo no es válido.")
+    @NotBlank
+    @Email
     private String patientEmail;
 
-    @NotNull(message = "Elige fecha y hora.")
+    @NotNull
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private LocalDateTime start;
 

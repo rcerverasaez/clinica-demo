@@ -26,7 +26,7 @@ public class OutboxController {
     @PostMapping("/recepcion/buzon/enviar")
     public String sendNow(RedirectAttributes redirect) {
         int sent = reminders.sendDueReminders();
-        redirect.addFlashAttribute("message", "Recordatorios nuevos en el buzón: " + sent + ".");
+        redirect.addFlashAttribute("sent", sent);
         return "redirect:/recepcion/buzon";
     }
 }
