@@ -7,6 +7,8 @@
 <main>
     <h1>Citas próximas</h1>
 
+    <p><a th:href="@{/recepcion/buzon}">Buzón de recordatorios</a></p>
+
     <p class="empty" th:if="${#lists.isEmpty(appointments)}">No hay citas próximas.</p>
 
     <div class="table-wrap" th:unless="${#lists.isEmpty(appointments)}">

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Buzón de recordatorios')}"></head>
+<body>
+<header class="top" th:replace="~{fragments/layout :: nav}"></header>
+
+<main>
+    <p><a th:href="@{/recepcion}">← Volver a citas próximas</a></p>
+    <h1>Buzón de recordatorios</h1>
+    <p class="hint">Simulación: los recordatorios se guardan aquí y no se envían por correo.</p>
+
+    <div class="alert ok" th:if="${message}" th:text="${message}">Mensaje</div>
+
+    <form method="post" th:action="@{/recepcion/buzon/enviar}">
+        <button class="btn ghost" type="submit">Preparar recordatorios ahora</button>
+    </form>
+
+    <p class="empty" th:if="${notifications.isEmpty()}">El buzón está vacío.</p>
+
+    <div class="table-wrap" th:unless="${notifications.isEmpty()}">
+        <table>
+            <thead>
+            <tr>
+                <th>Guardado</th>
+                <th>Destinatario</th>
+                <th>Asunto</th>
+                <th>Mensaje</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="n : ${notifications}">
+                <td th:text="${#temporals.format(n.sentAt, 'dd/MM HH:mm')}">01/01 10:00</td>
+                <td th:text="${n.recipient}">correo</td>
+                <td th:text="${n.subject}">Asunto</td>
+                <td th:text="${n.body}">Texto</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</main>
+</body>
+</html>
