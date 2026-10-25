@@ -6,15 +6,17 @@ Demo de una clínica para el curso de introducción a la IA. **Todos los datos s
 
 - Inicio con consultas y especialistas (`/`).
 - Reserva pública por huecos libres (`/reservar`): primero se elige consulta, especialista y día, y luego el hueco.
-- «Mis citas» (`/mis-citas`): el paciente consulta o cancela su cita con el código de 8 caracteres que recibe al reservar. No necesita cuenta.
-- Vista de recepción con las citas próximas, su código y cancelación (`/recepcion`). Requiere el rol RECEPCION.
-- Agenda del día para el especialista (`/agenda`): marca cada cita como atendida o no presentada y registra ausencias. Requiere el rol ESPECIALISTA.
+- «Mis citas» (`/mis-citas`): el paciente consulta o cancela su cita, descarga los documentos de su cita y escribe a recepción. Lo hace con el código de 8 caracteres que recibe al reservar. No necesita cuenta.
+- Recepción (`/recepcion`, rol RECEPCION): citas próximas con su código, cancelación y conversación con cada paciente. Desde ahí se llega al panel (`/recepcion/panel`), al buzón de recordatorios (`/recepcion/buzon`), al registro de acciones (`/recepcion/auditoria`) y al catálogo (`/recepcion/catalogo`), donde se añaden especialistas y consultas.
+- Agenda del día para el especialista (`/agenda`, rol ESPECIALISTA): marca cada cita como atendida o no presentada, registra ausencias y sube documentos (PDF, JPG o PNG de hasta 2 MB) a cada cita.
 - Reglas de la clínica: horario de 9:00 a 18:00, de lunes a viernes, citas en punto o y media, sin solapes por especialista, sin ausencias del especialista y solo en el futuro.
+- Accesible: enlace «Ir al contenido», avisos que leen los lectores de pantalla y un menú que se adapta al móvil.
 
 ## Requisitos
 
 - JDK 17 o superior. Comprueba la versión con `java -version`. Si tienes varios JDK instalados, apunta `JAVA_HOME` a uno de 17 o más antes de lanzar Maven.
 - No hace falta instalar Maven: `./mvnw` descarga la versión que usa el proyecto la primera vez.
+- Opcional: Docker, si quieres arrancar la app con la sección «Con Docker» en vez de con Maven.
 
 ## Cómo se usa
 
@@ -32,6 +34,16 @@ Lanzar los tests:
 ./mvnw test
 ```
 
+## Con Docker
+
+Si tienes Docker en marcha, puedes arrancar la app sin tener Java instalado:
+
+```bash
+docker compose up --build
+```
+
+Abre http://localhost:8080. Para cambiar las contraseñas de demo, copia `.env.example` a `.env` y edita los valores. El fichero `.env` no se sube al repositorio.
+
 ## Si algo falla
 
 Es normal que algo falle al instalar: cada equipo tiene su propia versión de Java, su red y su configuración. Antes de pedir ayuda, mira si tu error aparece en esta tabla:
@@ -40,6 +52,7 @@ Es normal que algo falle al instalar: cada equipo tiene su propia versión de Ja
 |---|---|---|
 | `class file has wrong version 61.0, should be 52.0` o `UnsupportedClassVersionError` | Maven está usando un Java anterior a 17 | Comprueba `java -version`, apunta `JAVA_HOME` a un JDK 17 o superior y vuelve a lanzar el comando. |
 | `Port 8080 was already in use` | Otro programa está usando el puerto 8080 | Cierra ese programa o arranca con `./mvnw spring-boot:run -Dspring-boot.run.arguments=--server.port=8081` y abre http://localhost:8081. |
+| `Cannot connect to the Docker daemon` | Docker no está en marcha | Abre Docker Desktop (o arranca el servicio de Docker) y vuelve a lanzar `docker compose up --build`. |
 | `Could not resolve dependencies` o `Could not transfer artifact` | No hay conexión a internet, o la red bloquea las descargas | Comprueba la conexión y vuelve a lanzar el comando. En una red de empresa, pregunta a quien administra la red. |
 | Un test falla justo después de cambiar algo | El cambio rompe una regla de la clínica | Lee el nombre del test y el mensaje completo: el propio test dice qué se esperaba. |
 
@@ -88,10 +101,15 @@ La documentación interactiva está en http://localhost:8080/swagger-ui.html y l
 
 Son cuentas ficticias de demo. Para cambiarlas, define `CLINICA_RECEPCION_PASSWORD` y `CLINICA_ESPECIALISTA_PASSWORD` antes de arrancar.
 
+## Integración continua
+
+GitHub Actions ejecuta `./mvnw verify` en cada push y en cada pull request (`.github/workflows/ci.yml`). Si una ejecución sale en rojo, abre el registro y busca el primer test que falla: el propio test dice qué se esperaba.
+
 ## Notas
 
 - La base de datos es H2 en memoria: los datos se pierden al reiniciar. El esquema lo crea Flyway (`src/main/resources/db/migration`).
 - Las citas de ejemplo se crean al arrancar. Para desactivarlas, usa `clinica.demo-data=false`.
-- No hay envío real de correos. El correo solo se muestra en la confirmación.
+- No se envía ningún correo de verdad. Los recordatorios se preparan cada hora y se guardan en el buzón de recepción; la confirmación de una reserva se muestra en pantalla.
+- El registro de acciones no guarda nombres, correos ni códigos de cita.
 - Las citas canceladas no se borran: pasan a estado `CANCELADA` y el hueco vuelve a quedar libre.
 - Estados de una cita: `CONFIRMADA`, `CANCELADA`, `ATENDIDA` y `NO_PRESENTADO`. La agenda solo cambia las confirmadas.
