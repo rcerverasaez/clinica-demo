@@ -4,22 +4,22 @@
 <body>
 <header class="top" th:replace="~{fragments/layout :: nav}"></header>
 
-<main>
+<main id="contenido">
     <p><a th:href="@{/recepcion}" th:text="#{common.back-upcoming}">← Volver a citas próximas</a></p>
     <h1 th:text="#{audit.title}">Registro de acciones</h1>
     <p class="hint" th:text="#{audit.hint}">Últimas 200 acciones. El detalle no incluye nombres, correos ni códigos de cita.</p>
 
     <p class="empty" th:if="${events.isEmpty()}" th:text="#{audit.empty}">Todavía no hay acciones registradas.</p>
 
-    <div class="table-wrap" th:unless="${events.isEmpty()}">
+    <div class="table-wrap" tabindex="0" th:unless="${events.isEmpty()}">
         <table>
             <thead>
             <tr>
-                <th th:text="#{audit.when}">Cuándo</th>
-                <th th:text="#{audit.who}">Quién</th>
-                <th th:text="#{audit.action}">Acción</th>
-                <th th:text="#{audit.target}">Objetivo</th>
-                <th th:text="#{audit.detail}">Detalle</th>
+                <th scope="col" th:text="#{audit.when}">Cuándo</th>
+                <th scope="col" th:text="#{audit.who}">Quién</th>
+                <th scope="col" th:text="#{audit.action}">Acción</th>
+                <th scope="col" th:text="#{audit.target}">Objetivo</th>
+                <th scope="col" th:text="#{audit.detail}">Detalle</th>
             </tr>
             </thead>
             <tbody>

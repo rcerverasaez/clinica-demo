@@ -4,7 +4,7 @@
 <body>
 <header class="top" th:replace="~{fragments/layout :: nav}"></header>
 
-<main class="narrow">
+<main id="contenido" class="narrow">
     <p><a th:href="@{/recepcion}" th:text="#{common.back-upcoming}">← Volver a citas próximas</a></p>
     <h1 th:text="#{title.reception-thread}">Mensajes de la cita</h1>
     <p>
@@ -14,7 +14,7 @@
         · <span th:text="#{common.code}">Código</span> <strong class="code" th:text="${appointment.code}">ABCD1234</strong>
     </p>
 
-    <div class="alert error" th:if="${bookingError}" th:text="#{${bookingError}}">Error</div>
+    <div class="alert error" role="alert" th:if="${bookingError}" th:text="#{${bookingError}}">Error</div>
 
     <section class="card">
         <h2 th:text="#{reception.conversation}">Conversación</h2>

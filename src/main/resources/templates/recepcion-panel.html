@@ -4,18 +4,18 @@
 <body>
 <header class="top" th:replace="~{fragments/layout :: nav}"></header>
 
-<main>
+<main id="contenido">
     <p><a th:href="@{/recepcion}" th:text="#{common.back-upcoming}">← Volver a citas próximas</a></p>
     <h1 th:text="#{panel.title}">Panel</h1>
 
     <section class="card">
         <h2 th:text="#{panel.next-week}">Citas de los próximos 7 días</h2>
-        <div class="table-wrap">
+        <div class="table-wrap" tabindex="0">
             <table>
                 <thead>
                 <tr>
-                    <th th:text="#{common.day}">Día</th>
-                    <th th:text="#{panel.count}">Citas</th>
+                    <th scope="col" th:text="#{common.day}">Día</th>
+                    <th scope="col" th:text="#{panel.count}">Citas</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -31,12 +31,12 @@
     <section class="card">
         <h2 th:text="#{panel.occupancy}">Ocupación por especialista (7 días)</h2>
         <p class="hint" th:text="#{panel.occupancy-hint}">Minutos reservados sobre el horario de lunes a viernes, de 9:00 a 18:00. No descuenta ausencias.</p>
-        <div class="table-wrap">
+        <div class="table-wrap" tabindex="0">
             <table>
                 <thead>
                 <tr>
-                    <th th:text="#{common.specialist}">Especialista</th>
-                    <th th:text="#{panel.occupancy-col}">Ocupación</th>
+                    <th scope="col" th:text="#{common.specialist}">Especialista</th>
+                    <th scope="col" th:text="#{panel.occupancy-col}">Ocupación</th>
                 </tr>
                 </thead>
                 <tbody>

@@ -4,7 +4,7 @@
 <body>
 <header class="top" th:replace="~{fragments/layout :: nav}"></header>
 
-<main class="narrow">
+<main id="contenido" class="narrow">
     <p><a th:href="@{/agenda}" th:text="#{common.back-agenda}">← Volver a la agenda</a></p>
     <h1 th:text="${appointment.treatment.name}">Consulta</h1>
     <p>
@@ -16,8 +16,8 @@
         <span th:text="#{common.status}">Estado</span>: <strong th:text="#{${'status.' + appointment.status.name()}}">Confirmada</strong>
     </p>
 
-    <div class="alert ok" th:if="${message}" th:text="#{${message}}">Mensaje</div>
-    <div class="alert error" th:if="${bookingError}" th:text="#{${bookingError}}">Error</div>
+    <div class="alert ok" role="status" th:if="${message}" th:text="#{${message}}">Mensaje</div>
+    <div class="alert error" role="alert" th:if="${bookingError}" th:text="#{${bookingError}}">Error</div>
 
     <section class="card">
         <h2 th:text="#{agenda.documents}">Documentos</h2>

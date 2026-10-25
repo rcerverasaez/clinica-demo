@@ -4,12 +4,12 @@
 <body>
 <header class="top" th:replace="~{fragments/layout :: nav}"></header>
 
-<main class="narrow">
+<main id="contenido" class="narrow">
     <h1 th:text="#{title.appointments}">Mis citas</h1>
     <p class="hint" th:text="#{appointments.hint}">Introduce el código de 8 caracteres que recibiste al reservar.</p>
 
-    <div class="alert ok" th:if="${message}" th:text="#{${message}}">Mensaje</div>
-    <div class="alert error" th:if="${bookingError}" th:text="#{${bookingError}}">Error</div>
+    <div class="alert ok" role="status" th:if="${message}" th:text="#{${message}}">Mensaje</div>
+    <div class="alert error" role="alert" th:if="${bookingError}" th:text="#{${bookingError}}">Error</div>
 
     <form class="form" method="post" th:action="@{/mis-citas}">
         <label>

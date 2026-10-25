@@ -4,11 +4,11 @@
 <body>
 <header class="top" th:replace="~{fragments/layout :: nav}"></header>
 
-<main>
+<main id="contenido">
     <h1 th:text="#{agenda.title}">Agenda del día</h1>
 
-    <div class="alert ok" th:if="${message}" th:text="#{${message}}">Mensaje</div>
-    <div class="alert error" th:if="${bookingError}" th:text="#{${bookingError}}">Error</div>
+    <div class="alert ok" role="status" th:if="${message}" th:text="#{${message}}">Mensaje</div>
+    <div class="alert error" role="alert" th:if="${bookingError}" th:text="#{${bookingError}}">Error</div>
 
     <form class="form" method="get" th:action="@{/agenda}">
         <label>
@@ -20,16 +20,16 @@
 
     <p class="empty" th:if="${#lists.isEmpty(appointments)}" th:text="#{agenda.empty}">No hay citas este día.</p>
 
-    <div class="table-wrap" th:unless="${#lists.isEmpty(appointments)}">
+    <div class="table-wrap" tabindex="0" th:unless="${#lists.isEmpty(appointments)}">
         <table>
             <thead>
             <tr>
-                <th th:text="#{common.time}">Hora</th>
-                <th th:text="#{common.treatment}">Consulta</th>
-                <th th:text="#{common.specialist}">Especialista</th>
-                <th th:text="#{common.patient}">Paciente</th>
-                <th th:text="#{common.status}">Estado</th>
-                <th></th>
+                <th scope="col" th:text="#{common.time}">Hora</th>
+                <th scope="col" th:text="#{common.treatment}">Consulta</th>
+                <th scope="col" th:text="#{common.specialist}">Especialista</th>
+                <th scope="col" th:text="#{common.patient}">Paciente</th>
+                <th scope="col" th:text="#{common.status}">Estado</th>
+                <th scope="col"></th>
             </tr>
             </thead>
             <tbody>

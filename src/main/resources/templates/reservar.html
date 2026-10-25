@@ -4,17 +4,17 @@
 <body>
 <header class="top" th:replace="~{fragments/layout :: nav}"></header>
 
-<main class="narrow">
+<main id="contenido" class="narrow">
     <h1 th:text="#{book.title}">Reservar cita</h1>
 
-    <div class="alert ok" th:if="${confirmed}">
+    <div class="alert ok" role="status" th:if="${confirmed}">
         <strong th:text="#{book.confirmed}">Cita confirmada.</strong>
         <span th:text="#{book.summary(${#temporals.format(confirmed.startAt, 'dd/MM/yyyy HH:mm')}, ${confirmed.treatment.name}, ${confirmed.specialist.name})}">Cita</span>.
         <span th:text="#{book.your-code}">Tu código es</span> <strong class="code" th:text="${confirmed.code}">ABCD1234</strong>.
         <span th:text="#{book.keep-code}">Guárdalo para consultar o cancelar tu cita en</span> <a th:href="@{/mis-citas}" th:text="#{nav.appointments}">Mis citas</a>.
     </div>
 
-    <div class="alert error" th:if="${bookingError}" th:text="#{${bookingError}}">Error</div>
+    <div class="alert error" role="alert" th:if="${bookingError}" th:text="#{${bookingError}}">Error</div>
 
     <h2 th:text="#{book.step1}">1. Elige día y hueco</h2>
     <form class="form" method="get" th:action="@{/reservar}">

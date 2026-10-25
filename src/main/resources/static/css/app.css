@@ -86,7 +86,7 @@ a { color: var(--brand); }
 
 .top .brand span { color: var(--brand); }
 
-.top nav { display: flex; gap: 1.25rem; }
+.top nav { display: flex; flex-wrap: wrap; gap: 0.5rem 1.25rem; }
 .top nav a { color: var(--muted); text-decoration: none; font-weight: 500; }
 .top nav a:hover { color: var(--brand); }
 
@@ -245,3 +245,33 @@ td form { margin: 0; }
 
 .code { font-family: ui-monospace, Menlo, monospace; letter-spacing: .08em; }
 .slots { display: flex; flex-wrap: wrap; gap: .5rem; list-style: none; padding: 0; }
+
+/* Enlace de salto: invisible hasta que recibe el foco con el teclado. */
+.skip-link {
+    position: absolute;
+    left: 1rem;
+    top: -3rem;
+    padding: 0.5rem 0.9rem;
+    border-radius: 8px;
+    background: var(--brand);
+    color: #fff;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.skip-link:focus { top: 0.75rem; }
+
+/* Foco visible en todo lo que se puede enfocar, también en modo oscuro. */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+[tabindex]:focus-visible {
+    outline: 3px solid var(--brand);
+    outline-offset: 2px;
+}
+
+@media (max-width: 600px) {
+    .top nav { gap: 0.5rem 1rem; }
+}

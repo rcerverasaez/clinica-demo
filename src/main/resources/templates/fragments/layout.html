@@ -8,6 +8,7 @@
 </head>
 <body>
 <header class="top" th:fragment="nav">
+    <a class="skip-link" href="#contenido" th:text="#{nav.skip}">Ir al contenido</a>
     <a class="brand" th:href="@{/}" th:utext="#{app.brand}">Clínica <span>Demo</span></a>
     <nav>
         <a th:href="@{/}" th:text="#{nav.home}">Inicio</a>

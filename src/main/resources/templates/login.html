@@ -4,11 +4,11 @@
 <body>
 <header class="top" th:replace="~{fragments/layout :: nav}"></header>
 
-<main class="narrow">
+<main id="contenido" class="narrow">
     <h1 th:text="#{login.title}">Acceso del personal</h1>
 
-    <div class="alert error" th:if="${param.error}" th:text="#{login.error}">Usuario o contraseña incorrectos.</div>
-    <div class="alert ok" th:if="${param.logout}" th:text="#{login.logged-out}">Has cerrado sesión.</div>
+    <div class="alert error" role="alert" th:if="${param.error}" th:text="#{login.error}">Usuario o contraseña incorrectos.</div>
+    <div class="alert ok" role="status" th:if="${param.logout}" th:text="#{login.logged-out}">Has cerrado sesión.</div>
 
     <form class="form" method="post" th:action="@{/login}">
         <label>

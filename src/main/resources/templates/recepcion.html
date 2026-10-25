@@ -4,23 +4,23 @@
 <body>
 <header class="top" th:replace="~{fragments/layout :: nav}"></header>
 
-<main>
+<main id="contenido">
     <h1 th:text="#{reception.title}">Citas próximas</h1>
 
     <p><a th:href="@{/recepcion/buzon}" th:text="#{reception.outbox}">Buzón de recordatorios</a> · <a th:href="@{/recepcion/panel}" th:text="#{reception.panel}">Panel</a> · <a th:href="@{/recepcion/auditoria}" th:text="#{reception.audit}">Registro</a></p>
 
     <p class="empty" th:if="${#lists.isEmpty(appointments)}" th:text="#{reception.none}">No hay citas próximas.</p>
 
-    <div class="table-wrap" th:unless="${#lists.isEmpty(appointments)}">
+    <div class="table-wrap" tabindex="0" th:unless="${#lists.isEmpty(appointments)}">
         <table>
             <thead>
             <tr>
-                <th th:text="#{common.date}">Fecha</th>
-                <th th:text="#{common.treatment}">Consulta</th>
-                <th th:text="#{common.specialist}">Especialista</th>
-                <th th:text="#{common.code}">Código</th>
-                <th th:text="#{common.patient}">Paciente</th>
-                <th></th>
+                <th scope="col" th:text="#{common.date}">Fecha</th>
+                <th scope="col" th:text="#{common.treatment}">Consulta</th>
+                <th scope="col" th:text="#{common.specialist}">Especialista</th>
+                <th scope="col" th:text="#{common.code}">Código</th>
+                <th scope="col" th:text="#{common.patient}">Paciente</th>
+                <th scope="col"></th>
             </tr>
             </thead>
             <tbody>
