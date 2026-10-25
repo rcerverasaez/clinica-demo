@@ -8,9 +8,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-/** «Mis citas»: el paciente consulta y cancela su cita con el código de confirmación, sin cuenta. */
+/**
+ * «Mis citas»: el paciente consulta y cancela su cita con el código de confirmación, sin cuenta.
+ * El código viaja en el cuerpo del formulario (POST), nunca en la URL.
+ */
 @Controller
 public class PatientController {
 
@@ -21,26 +23,30 @@ public class PatientController {
     }
 
     @GetMapping("/mis-citas")
-    public String find(@RequestParam(required = false) String codigo, Model model) {
+    public String form() {
+        return "mis-citas";
+    }
+
+    @PostMapping("/mis-citas")
+    public String find(@RequestParam String codigo, Model model) {
         model.addAttribute("codigo", codigo);
-        if (codigo != null && !codigo.isBlank()) {
-            try {
-                model.addAttribute("appointment", appointments.findByCode(codigo));
-            } catch (BookingException e) {
-                model.addAttribute("bookingError", e.getMessage());
-            }
+        try {
+            Appointment appointment = appointments.findByCode(codigo);
+            model.addAttribute("appointment", appointment);
+        } catch (BookingException e) {
+            model.addAttribute("bookingError", e.getMessage());
         }
         return "mis-citas";
     }
 
     @PostMapping("/mis-citas/cancelar")
-    public String cancel(@RequestParam String codigo, RedirectAttributes redirect) {
+    public String cancel(@RequestParam String codigo, Model model) {
         try {
             appointments.cancelByCode(codigo);
-            redirect.addFlashAttribute("message", "Tu cita se ha cancelado.");
+            model.addAttribute("message", "Tu cita se ha cancelado.");
         } catch (BookingException e) {
-            redirect.addFlashAttribute("bookingError", e.getMessage());
+            model.addAttribute("bookingError", e.getMessage());
         }
-        return "redirect:/mis-citas?codigo=" + codigo.trim().toUpperCase();
+        return find(codigo, model);
     }
 }

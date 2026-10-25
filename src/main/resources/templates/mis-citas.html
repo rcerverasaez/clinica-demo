@@ -11,7 +11,7 @@
     <div class="alert ok" th:if="${message}" th:text="${message}">Mensaje</div>
     <div class="alert error" th:if="${bookingError}" th:text="${bookingError}">Error</div>
 
-    <form class="form" method="get" th:action="@{/mis-citas}">
+    <form class="form" method="post" th:action="@{/mis-citas}">
         <label>
             Código de cita
             <input type="text" name="codigo" maxlength="8" required autocomplete="off" th:value="${codigo}">
