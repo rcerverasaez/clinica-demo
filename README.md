@@ -31,6 +31,18 @@ Lanzar los tests:
 ./mvnw test
 ```
 
+## API REST
+
+| Método | Ruta | Acceso |
+|---|---|---|
+| GET | `/api/treatments` | Público |
+| GET | `/api/specialists` | Público |
+| POST | `/api/appointments` | Público (422 si incumple las reglas) |
+| GET | `/api/appointments` | RECEPCION |
+| DELETE | `/api/appointments/{id}` | RECEPCION |
+
+La documentación interactiva está en http://localhost:8080/swagger-ui.html y la especificación en `/v3/api-docs`.
+
 ## Accesos de demo
 
 | Usuario | Contraseña por defecto | Rol |

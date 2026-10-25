@@ -3,6 +3,7 @@ package es.demo.clinica.security;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.userdetails.User;
@@ -22,8 +23,12 @@ class SecurityConfig {
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http.csrf(csrf -> csrf.ignoringRequestMatchers("/api/**"));
         http.authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/", "/reservar", "/login", "/css/**", "/error", "/actuator/health").permitAll()
+                        .requestMatchers("/", "/reservar", "/login", "/css/**", "/error", "/actuator/health", "/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/treatments", "/api/specialists").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/appointments").permitAll()
+                        .requestMatchers("/api/**").hasRole("RECEPCION")
                         .requestMatchers("/recepcion/**").hasRole("RECEPCION")
                         .requestMatchers("/agenda/**").hasRole("ESPECIALISTA")
                         .anyRequest().authenticated())
