@@ -32,6 +32,41 @@ Lanzar los tests:
 ./mvnw test
 ```
 
+## Si algo falla
+
+Es normal que algo falle al instalar: cada equipo tiene su propia versión de Java, su red y su configuración. Antes de pedir ayuda, mira si tu error aparece en esta tabla:
+
+| Síntoma | Causa probable | Qué hacer |
+|---|---|---|
+| `class file has wrong version 61.0, should be 52.0` o `UnsupportedClassVersionError` | Maven está usando un Java anterior a 17 | Comprueba `java -version`, apunta `JAVA_HOME` a un JDK 17 o superior y vuelve a lanzar el comando. |
+| `Port 8080 was already in use` | Otro programa está usando el puerto 8080 | Cierra ese programa o arranca con `./mvnw spring-boot:run -Dspring-boot.run.arguments=--server.port=8081` y abre http://localhost:8081. |
+| `Could not resolve dependencies` o `Could not transfer artifact` | No hay conexión a internet, o la red bloquea las descargas | Comprueba la conexión y vuelve a lanzar el comando. En una red de empresa, pregunta a quien administra la red. |
+| Un test falla justo después de cambiar algo | El cambio rompe una regla de la clínica | Lee el nombre del test y el mensaje completo: el propio test dice qué se esperaba. |
+
+### Cómo pedirle ayuda a una IA
+
+Una IA ayuda mucho más si le das contexto. Pega el error completo, no un resumen, y explica qué estabas haciendo:
+
+```text
+Estoy instalando clinica-demo siguiendo la sección "Cómo se usa" del README.
+Sistema operativo: (Windows, macOS o Linux)
+Comando que ejecuto: ./mvnw spring-boot:run
+Resultado de java -version: (pégalo aquí)
+Error completo:
+(pega aquí todo lo que aparece en la terminal)
+
+¿Qué causa este error? Explícamelo antes de darme comandos y no cambies
+archivos del proyecto sin preguntarme.
+```
+
+Unas reglas sencillas:
+
+- Pide que te **expliquen la causa**, no solo que lo arreglen. Así puedes comprobar la respuesta y aprendes para la próxima vez.
+- Ejecuta **un comando cada vez** y pega de vuelta el resultado.
+- Antes de pegar un error, quita contraseñas, tokens y correos reales. Las contraseñas de demo de este README son ficticias, pero las tuyas no deben salir de tu equipo.
+- Si la IA propone borrar carpetas, editar `pom.xml` o instalar algo, pregunta por qué antes de hacerlo.
+- La IA también se equivoca. Si una respuesta no encaja con lo que ves, vuelve a preguntar con el resultado nuevo.
+
 ## API REST
 
 | Método | Ruta | Acceso |
