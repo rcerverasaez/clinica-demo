@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Acceso')}"></head>
+<body>
+<header class="top" th:replace="~{fragments/layout :: nav}"></header>
+
+<main class="narrow">
+    <h1>Acceso del personal</h1>
+
+    <div class="alert error" th:if="${param.error}">Usuario o contraseña incorrectos.</div>
+    <div class="alert ok" th:if="${param.logout}">Has cerrado sesión.</div>
+
+    <form class="form" method="post" th:action="@{/login}">
+        <label>
+            Usuario
+            <input type="text" name="username" autocomplete="username" required>
+        </label>
+        <label>
+            Contraseña
+            <input type="password" name="password" autocomplete="current-password" required>
+        </label>
+        <button class="btn" type="submit">Entrar</button>
+    </form>
+    <p class="hint">Cuentas de demo: <code>recepcion</code> y <code>especialista</code>. Las contraseñas están en el README.</p>
+</main>
+</body>
+</html>

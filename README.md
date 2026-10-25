@@ -5,8 +5,9 @@ Demo de una clínica para el curso de introducción a la IA. **Todos los datos s
 ## Qué incluye
 
 - Inicio con consultas y especialistas (`/`).
-- Formulario de reserva para el paciente (`/reservar`).
-- Vista de recepción con las citas próximas y cancelación (`/recepcion`).
+- Formulario de reserva para el paciente, público (`/reservar`).
+- Vista de recepción con las citas próximas y cancelación (`/recepcion`). Requiere el rol RECEPCION.
+- Zona de especialista (`/agenda`). Requiere el rol ESPECIALISTA. Se completa en la fase 2.
 - Reglas de la clínica: horario de 9:00 a 18:00, de lunes a viernes, citas en punto o y media, sin solapes por especialista y solo en el futuro.
 
 ## Requisitos
@@ -30,8 +31,17 @@ Lanzar los tests:
 ./mvnw test
 ```
 
+## Accesos de demo
+
+| Usuario | Contraseña por defecto | Rol |
+|---|---|---|
+| `recepcion` | `recepcion-demo` | RECEPCION |
+| `especialista` | `especialista-demo` | ESPECIALISTA |
+
+Son cuentas ficticias de demo. Para cambiarlas, define `CLINICA_RECEPCION_PASSWORD` y `CLINICA_ESPECIALISTA_PASSWORD` antes de arrancar.
+
 ## Notas
 
-- Las citas se guardan en memoria: se pierden al reiniciar la aplicación.
-- No hay base de datos, autenticación ni envío real de correos. El correo solo se muestra en la confirmación.
-- No hay variables de entorno ni secretos.
+- La base de datos es H2 en memoria: los datos se pierden al reiniciar. El esquema lo crea Flyway (`src/main/resources/db/migration`).
+- Las citas de ejemplo se crean al arrancar. Para desactivarlas, usa `clinica.demo-data=false`.
+- No hay envío real de correos. El correo solo se muestra en la confirmación.

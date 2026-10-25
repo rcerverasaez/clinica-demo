@@ -216,3 +216,17 @@ td form { margin: 0; }
     .top { padding: 0.9rem 1rem; }
     main { padding: 1.5rem 1rem 3rem; }
 }
+
+.top form.inline { margin: 0; }
+
+.top button.link {
+    padding: 0;
+    border: 0;
+    background: none;
+    color: var(--muted);
+    font: inherit;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.top button.link:hover { color: var(--brand); }

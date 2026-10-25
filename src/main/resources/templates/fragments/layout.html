@@ -13,6 +13,10 @@
         <a th:href="@{/}">Inicio</a>
         <a th:href="@{/reservar}">Reservar cita</a>
         <a th:href="@{/recepcion}">Recepción</a>
+        <form th:if="${loggedIn}" method="post" th:action="@{/logout}" class="inline">
+            <button class="link" type="submit">Salir</button>
+        </form>
+        <a th:if="${!loggedIn}" th:href="@{/login}">Acceso personal</a>
     </nav>
 </header>
 </body>
