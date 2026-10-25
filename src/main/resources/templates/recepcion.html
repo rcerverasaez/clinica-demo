@@ -22,15 +22,15 @@
             </thead>
             <tbody>
             <tr th:each="a : ${appointments}">
-                <td th:text="${#temporals.format(a.start(), 'dd/MM HH:mm')}">01/01 10:00</td>
-                <td th:text="${a.treatment().name()}">Consulta</td>
-                <td th:text="${a.specialist().name()}">Especialista</td>
+                <td th:text="${#temporals.format(a.startAt, 'dd/MM HH:mm')}">01/01 10:00</td>
+                <td th:text="${a.treatment.name}">Consulta</td>
+                <td th:text="${a.specialist.name}">Especialista</td>
                 <td>
-                    <span th:text="${a.patientName()}">Nombre</span><br>
-                    <small class="meta" th:text="${a.patientEmail()}">correo</small>
+                    <span th:text="${a.patientName}">Nombre</span><br>
+                    <small class="meta" th:text="${a.patientEmail}">correo</small>
                 </td>
                 <td>
-                    <form method="post" th:action="@{/recepcion/{id}/cancelar(id=${a.id()})}">
+                    <form method="post" th:action="@{/recepcion/{id}/cancelar(id=${a.id})}">
                         <button class="btn ghost" type="submit">Cancelar</button>
                     </form>
                 </td>

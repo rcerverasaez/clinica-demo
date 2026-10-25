@@ -10,9 +10,11 @@ import java.time.LocalTime;
 import java.util.List;
 import java.util.UUID;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /** Reglas de la clínica: horario, días laborables, citas en el futuro y sin solapes. */
 @Service
+@Transactional
 public class AppointmentService {
 
     private static final LocalTime OPENING = LocalTime.of(9, 0);
@@ -28,15 +30,14 @@ public class AppointmentService {
         this.clock = clock;
     }
 
-    /** Reserva una cita. Es síncrono para que dos peticiones no ocupen el mismo hueco a la vez. */
-    public synchronized Appointment book(BookingForm form) {
+    public Appointment book(BookingForm form) {
         Treatment treatment = catalog.treatment(form.getTreatmentId())
                 .orElseThrow(() -> new BookingException("La consulta elegida no existe."));
         Specialist specialist = catalog.specialist(form.getSpecialistId())
                 .orElseThrow(() -> new BookingException("El especialista elegido no existe."));
 
         LocalDateTime start = form.getStart();
-        LocalDateTime end = start.plusMinutes(treatment.durationMinutes());
+        LocalDateTime end = start.plusMinutes(treatment.getDurationMinutes());
         validateSchedule(start, end);
         validateFreeSlot(specialist, start, end);
 
@@ -47,20 +48,16 @@ public class AppointmentService {
                 form.getPatientName().trim(),
                 form.getPatientEmail().trim(),
                 start);
-        repository.save(appointment);
-        return appointment;
+        return repository.save(appointment);
     }
 
-    /** Citas que aún no han empezado, ordenadas por fecha. */
+    @Transactional(readOnly = true)
     public List<Appointment> upcoming() {
-        LocalDateTime now = LocalDateTime.now(clock);
-        return repository.findAll().stream()
-                .filter(a -> a.start().isAfter(now))
-                .toList();
+        return repository.findByStartAtAfterOrderByStartAtAsc(LocalDateTime.now(clock));
     }
 
     public void cancel(String id) {
-        repository.remove(id);
+        repository.findById(id).ifPresent(repository::delete);
     }
 
     private void validateSchedule(LocalDateTime start, LocalDateTime end) {
@@ -82,10 +79,8 @@ public class AppointmentService {
     }
 
     private void validateFreeSlot(Specialist specialist, LocalDateTime start, LocalDateTime end) {
-        boolean taken = repository.findAll().stream()
-                .filter(a -> a.specialist().id().equals(specialist.id()))
-                .anyMatch(a -> a.overlaps(start, end));
-        if (taken) {
+        if (repository.existsBySpecialistIdAndStartAtLessThanAndEndAtGreaterThan(
+                specialist.getId(), end, start)) {
             throw new BookingException("Ese hueco ya está ocupado para este especialista.");
         }
     }

@@ -3,35 +3,27 @@ package es.demo.clinica.booking;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import es.demo.clinica.catalog.ClinicCatalog;
-import java.math.BigDecimal;
-import java.time.Clock;
-import java.time.Instant;
+import es.demo.clinica.FixedClockTestConfig;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
+import org.springframework.transaction.annotation.Transactional;
 
+@SpringBootTest(properties = "clinica.demo-data=false")
+@Transactional
+@Import(FixedClockTestConfig.class)
 class AppointmentServiceTest {
 
-    // Lunes 7 de enero de 2030, 8:00: todas las fechas de los tests son posteriores.
-    private static final Clock CLOCK = Clock.fixed(
-            LocalDateTime.of(2030, 1, 7, 8, 0).atZone(ZoneId.of("Europe/Madrid")).toInstant(),
-            ZoneId.of("Europe/Madrid"));
-
+    @Autowired
     private AppointmentService service;
-
-    @BeforeEach
-    void setUp() {
-        ClinicCatalog catalog = new ClinicCatalog();
-        service = new AppointmentService(catalog, new AppointmentRepository(), CLOCK);
-    }
 
     @Test
     void booksAFreeSlot() {
         Appointment appointment = service.book(form("primera-visita", "ana-lopez", "2030-01-07T10:00"));
 
-        assertEquals("Primera visita", appointment.treatment().name());
+        assertEquals("Primera visita", appointment.getTreatment().getName());
         assertEquals(1, service.upcoming().size());
     }
 
@@ -50,7 +42,7 @@ class AppointmentServiceTest {
 
         Appointment appointment = service.book(form("primera-visita", "luis-garcia", "2030-01-07T10:00"));
 
-        assertEquals("luis-garcia", appointment.specialist().id());
+        assertEquals("luis-garcia", appointment.getSpecialist().getId());
     }
 
     @Test
@@ -59,7 +51,7 @@ class AppointmentServiceTest {
 
         Appointment appointment = service.book(form("analitica", "ana-lopez", "2030-01-07T10:30"));
 
-        assertEquals("2030-01-07T10:30", appointment.start().toString());
+        assertEquals("2030-01-07T10:30", appointment.getStartAt().toString());
     }
 
     @Test

@@ -9,8 +9,8 @@
 
     <div class="alert ok" th:if="${confirmed}">
         <strong>Cita confirmada.</strong>
-        <span th:text="${#temporals.format(confirmed.start(), 'dd/MM/yyyy HH:mm')} + ' · ' + ${confirmed.treatment().name()} + ' con ' + ${confirmed.specialist().name()}">Cita</span>.
-        Te escribiremos a <span th:text="${confirmed.patientEmail()}">correo</span>.
+        <span th:text="${#temporals.format(confirmed.startAt, 'dd/MM/yyyy HH:mm')} + ' · ' + ${confirmed.treatment.name} + ' con ' + ${confirmed.specialist.name}">Cita</span>.
+        Te escribiremos a <span th:text="${confirmed.patientEmail}">correo</span>.
     </div>
 
     <div class="alert error" th:if="${bookingError}" th:text="${bookingError}">Error</div>
@@ -20,8 +20,8 @@
             Consulta
             <select th:field="*{treatmentId}">
                 <option value="">Elige una consulta</option>
-                <option th:each="t : ${treatments}" th:value="${t.id()}"
-                        th:text="${t.name()} + ' (' + ${t.durationMinutes()} + ' min)'">Consulta</option>
+                <option th:each="t : ${treatments}" th:value="${t.id}"
+                        th:text="${t.name} + ' (' + ${t.durationMinutes} + ' min)'">Consulta</option>
             </select>
             <small class="error-text" th:if="${#fields.hasErrors('treatmentId')}" th:errors="*{treatmentId}"></small>
         </label>
@@ -30,8 +30,8 @@
             Especialista
             <select th:field="*{specialistId}">
                 <option value="">Elige especialista</option>
-                <option th:each="s : ${specialists}" th:value="${s.id()}"
-                        th:text="${s.name()} + ' · ' + ${s.specialty()}">Especialista</option>
+                <option th:each="s : ${specialists}" th:value="${s.id}"
+                        th:text="${s.name} + ' · ' + ${s.specialty}">Especialista</option>
             </select>
             <small class="error-text" th:if="${#fields.hasErrors('specialistId')}" th:errors="*{specialistId}"></small>
         </label>

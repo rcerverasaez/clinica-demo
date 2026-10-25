@@ -16,9 +16,9 @@
         <h2>Consultas</h2>
         <div class="grid">
             <article class="card" th:each="t : ${treatments}">
-                <h3 th:text="${t.name()}">Consulta</h3>
-                <p class="meta" th:text="${t.durationMinutes()} + ' min'">30 min</p>
-                <p class="price" th:text="${#strings.concat(t.price(), ' €')}">60,00 €</p>
+                <h3 th:text="${t.name}">Consulta</h3>
+                <p class="meta" th:text="${t.durationMinutes} + ' min'">30 min</p>
+                <p class="price" th:text="${#strings.concat(t.price, ' €')}">60,00 €</p>
             </article>
         </div>
     </section>
@@ -27,8 +27,8 @@
         <h2>Especialistas</h2>
         <div class="grid">
             <article class="card" th:each="s : ${specialists}">
-                <h3 th:text="${s.name()}">Especialista</h3>
-                <p class="meta" th:text="${s.specialty()}">Especialidad</p>
+                <h3 th:text="${s.name}">Especialista</h3>
+                <p class="meta" th:text="${s.specialty}">Especialidad</p>
             </article>
         </div>
     </section>
