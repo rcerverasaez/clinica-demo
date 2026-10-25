@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class MessageService {
 
-    static final int MAX_LENGTH = 500;
+    static final int MAX_LENGTH = 300;
 
     private final MessageRepository messages;
     private final AppointmentService appointments;

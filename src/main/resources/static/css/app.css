@@ -198,7 +198,7 @@ a { color: var(--brand); }
     margin-bottom: 1.25rem;
 }
 
-.alert.ok { background: var(--ok-bg); color: var(--ok-text); }
+.alert.ok { background: var(--error-bg); color: var(--error-text); }
 .alert.error { background: var(--error-bg); color: var(--error-text); }
 
 .empty { color: var(--muted); }

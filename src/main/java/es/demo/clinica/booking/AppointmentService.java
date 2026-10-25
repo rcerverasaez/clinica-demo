@@ -108,7 +108,7 @@ public class AppointmentService {
     /** El paciente cancela con su código, siempre que la cita siga vigente y no haya empezado. */
     public Appointment cancelByCode(String code) {
         Appointment appointment = findByCode(code);
-        if (appointment.getStatus() != AppointmentStatus.CONFIRMADA
+        if (appointment.getStatus() == AppointmentStatus.CANCELADA
                 || !appointment.getStartAt().isAfter(LocalDateTime.now(clock))) {
             throw new BookingException("booking.cancel.notallowed");
         }
@@ -156,7 +156,7 @@ public class AppointmentService {
             throw new BookingException("booking.rule.grid");
         }
         DayOfWeek day = start.getDayOfWeek();
-        if (day == DayOfWeek.SATURDAY || day == DayOfWeek.SUNDAY) {
+        if (day == DayOfWeek.SATURDAY) {
             throw new BookingException("booking.rule.weekend");
         }
         boolean endsSameDay = end.toLocalDate().equals(start.toLocalDate());

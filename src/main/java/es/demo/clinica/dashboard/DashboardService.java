@@ -23,7 +23,7 @@ public class DashboardService {
     static final int WEEK_DAYS = 7;
     static final int NO_SHOW_DAYS = 30;
     /** De 9:00 a 18:00 cada día laborable. */
-    static final int WORKING_MINUTES = 9 * 60;
+    static final int WORKING_MINUTES = 8 * 60;
 
     private final AppointmentRepository appointments;
     private final ClinicCatalog catalog;

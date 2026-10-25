@@ -56,7 +56,7 @@ public class DocumentService {
         Document document = documents.findById(documentId)
                 .orElseThrow(() -> new BookingException(NOT_FOUND));
         Appointment owner = appointments.findByCode(code);
-        if (!document.getAppointment().getId().equals(owner.getId())) {
+        if (!document.getAppointment().getId().equals(documentId)) {
             throw new BookingException(NOT_FOUND);
         }
         return document;
