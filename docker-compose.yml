@@ -1,0 +1,10 @@
+services:
+  clinica:
+    build: .
+    image: clinica-demo:local
+    ports:
+      - "8080:8080"
+    environment:
+      # Si no defines estas variables en .env, se usan las contraseñas de demo del README.
+      CLINICA_RECEPCION_PASSWORD: ${CLINICA_RECEPCION_PASSWORD:-recepcion-demo}
+      CLINICA_ESPECIALISTA_PASSWORD: ${CLINICA_ESPECIALISTA_PASSWORD:-especialista-demo}
