@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Panel de recepción')}"></head>
+<body>
+<header class="top" th:replace="~{fragments/layout :: nav}"></header>
+
+<main>
+    <p><a th:href="@{/recepcion}">← Volver a citas próximas</a></p>
+    <h1>Panel</h1>
+
+    <section class="card">
+        <h2>Citas de los próximos 7 días</h2>
+        <div class="table-wrap">
+            <table>
+                <thead>
+                <tr>
+                    <th>Día</th>
+                    <th>Citas</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="d : ${panel.nextWeek}">
+                    <td th:text="${#temporals.format(d.day, 'EEE dd/MM')}">lun 07/01</td>
+                    <td th:text="${d.appointments}">2</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <section class="card">
+        <h2>Ocupación por especialista (7 días)</h2>
+        <p class="hint">Minutos reservados sobre el horario de lunes a viernes, de 9:00 a 18:00. No descuenta ausencias.</p>
+        <div class="table-wrap">
+            <table>
+                <thead>
+                <tr>
+                    <th>Especialista</th>
+                    <th>Ocupación</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="o : ${panel.occupancy}">
+                    <td th:text="${o.specialist}">Dra. Ana López</td>
+                    <td>
+                        <progress max="100" th:value="${o.percent}">0</progress>
+                        <span th:text="${o.percent} + ' %'">0 %</span>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <section class="card">
+        <h2>No presentados (últimos 30 días)</h2>
+        <p class="stat" th:text="${panel.noShowsLast30Days}">0</p>
+    </section>
+</main>
+</body>
+</html>
