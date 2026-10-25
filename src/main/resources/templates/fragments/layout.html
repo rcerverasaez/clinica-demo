@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="head(title)">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title th:text="${title} + ' · Clínica Demo'">Clínica Demo</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+<body>
+<header class="top" th:fragment="nav">
+    <a class="brand" th:href="@{/}">Clínica <span>Demo</span></a>
+    <nav>
+        <a th:href="@{/}">Inicio</a>
+        <a th:href="@{/reservar}">Reservar cita</a>
+        <a th:href="@{/recepcion}">Recepción</a>
+    </nav>
+</header>
+</body>
+</html>

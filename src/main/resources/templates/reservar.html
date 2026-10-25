@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Reservar cita')}"></head>
+<body>
+<header class="top" th:replace="~{fragments/layout :: nav}"></header>
+
+<main class="narrow">
+    <h1>Reservar cita</h1>
+
+    <div class="alert ok" th:if="${confirmed}">
+        <strong>Cita confirmada.</strong>
+        <span th:text="${#temporals.format(confirmed.start(), 'dd/MM/yyyy HH:mm')} + ' · ' + ${confirmed.treatment().name()} + ' con ' + ${confirmed.specialist().name()}">Cita</span>.
+        Te escribiremos a <span th:text="${confirmed.patientEmail()}">correo</span>.
+    </div>
+
+    <div class="alert error" th:if="${bookingError}" th:text="${bookingError}">Error</div>
+
+    <form class="form" method="post" th:action="@{/reservar}" th:object="${form}" novalidate>
+        <label>
+            Consulta
+            <select th:field="*{treatmentId}">
+                <option value="">Elige una consulta</option>
+                <option th:each="t : ${treatments}" th:value="${t.id()}"
+                        th:text="${t.name()} + ' (' + ${t.durationMinutes()} + ' min)'">Consulta</option>
+            </select>
+            <small class="error-text" th:if="${#fields.hasErrors('treatmentId')}" th:errors="*{treatmentId}"></small>
+        </label>
+
+        <label>
+            Especialista
+            <select th:field="*{specialistId}">
+                <option value="">Elige especialista</option>
+                <option th:each="s : ${specialists}" th:value="${s.id()}"
+                        th:text="${s.name()} + ' · ' + ${s.specialty()}">Especialista</option>
+            </select>
+            <small class="error-text" th:if="${#fields.hasErrors('specialistId')}" th:errors="*{specialistId}"></small>
+        </label>
+
+        <label>
+            Fecha y hora
+            <input type="datetime-local" th:field="*{start}" step="1800">
+            <small class="hint">Citas en punto o y media, de lunes a viernes.</small>
+            <small class="error-text" th:if="${#fields.hasErrors('start')}" th:errors="*{start}"></small>
+        </label>
+
+        <label>
+            Nombre
+            <input type="text" th:field="*{patientName}" maxlength="80" autocomplete="name">
+            <small class="error-text" th:if="${#fields.hasErrors('patientName')}" th:errors="*{patientName}"></small>
+        </label>
+
+        <label>
+            Correo
+            <input type="email" th:field="*{patientEmail}" autocomplete="email">
+            <small class="error-text" th:if="${#fields.hasErrors('patientEmail')}" th:errors="*{patientEmail}"></small>
+        </label>
+
+        <button class="btn" type="submit">Confirmar cita</button>
+    </form>
+</main>
+</body>
+</html>

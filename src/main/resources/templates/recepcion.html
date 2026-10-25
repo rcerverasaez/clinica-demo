@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Recepción')}"></head>
+<body>
+<header class="top" th:replace="~{fragments/layout :: nav}"></header>
+
+<main>
+    <h1>Citas próximas</h1>
+
+    <p class="empty" th:if="${#lists.isEmpty(appointments)}">No hay citas próximas.</p>
+
+    <div class="table-wrap" th:unless="${#lists.isEmpty(appointments)}">
+        <table>
+            <thead>
+            <tr>
+                <th>Fecha</th>
+                <th>Consulta</th>
+                <th>Especialista</th>
+                <th>Paciente</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="a : ${appointments}">
+                <td th:text="${#temporals.format(a.start(), 'dd/MM HH:mm')}">01/01 10:00</td>
+                <td th:text="${a.treatment().name()}">Consulta</td>
+                <td th:text="${a.specialist().name()}">Especialista</td>
+                <td>
+                    <span th:text="${a.patientName()}">Nombre</span><br>
+                    <small class="meta" th:text="${a.patientEmail()}">correo</small>
+                </td>
+                <td>
+                    <form method="post" th:action="@{/recepcion/{id}/cancelar(id=${a.id()})}">
+                        <button class="btn ghost" type="submit">Cancelar</button>
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</main>
+</body>
+</html>
