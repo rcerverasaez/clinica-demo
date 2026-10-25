@@ -6,10 +6,13 @@
 
 <main>
     <section class="hero">
-        <p class="eyebrow" th:text="#{home.eyebrow}">Datos ficticios · proyecto de formación</p>
-        <h1 th:text="#{home.title}">Reserva tu cita en unos minutos</h1>
-        <p class="lead" th:text="#{home.lead}">Elige la consulta, el especialista y el hueco que mejor te encaje. Abrimos de lunes a viernes, de 9:00 a 18:00.</p>
-        <a class="btn" th:href="@{/reservar}" th:text="#{home.book}">Reservar cita</a>
+        <div class="hero-text">
+            <p class="eyebrow" th:text="#{home.eyebrow}">Datos ficticios · proyecto de formación</p>
+            <h1 th:text="#{home.title}">Reserva tu cita en unos minutos</h1>
+            <p class="lead" th:text="#{home.lead}">Elige la consulta, el especialista y el hueco que mejor te encaje. Abrimos de lunes a viernes, de 9:00 a 18:00.</p>
+            <a class="btn" th:href="@{/reservar}" th:text="#{home.book}">Reservar cita</a>
+        </div>
+        <img class="hero-image" th:src="@{/img/hero-appointment.svg}" th:alt="#{home.image-alt}" width="400" height="300">
     </section>
 
     <section>

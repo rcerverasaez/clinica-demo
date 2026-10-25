@@ -91,7 +91,19 @@ a { color: var(--brand); }
 .top nav a:hover { color: var(--brand); }
 
 .hero {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 2rem;
     padding: 2.5rem 0 1rem;
+}
+
+.hero-text { flex: 1 1 320px; min-width: 0; }
+
+.hero-image {
+    flex: 0 1 360px;
+    max-width: 100%;
+    height: auto;
 }
 
 .eyebrow {

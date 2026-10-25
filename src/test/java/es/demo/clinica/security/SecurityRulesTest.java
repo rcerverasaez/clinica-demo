@@ -24,6 +24,11 @@ class SecurityRulesTest {
     }
 
     @Test
+    void staticImagesArePublic() throws Exception {
+        mvc.perform(get("/img/hero-appointment.svg")).andExpect(status().isOk());
+    }
+
+    @Test
     void receptionRequiresLogin() throws Exception {
         mvc.perform(get("/recepcion"))
                 .andExpect(status().is3xxRedirection())
