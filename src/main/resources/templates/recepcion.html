@@ -32,6 +32,7 @@
                     <small class="meta" th:text="${a.patientEmail}">correo</small>
                 </td>
                 <td>
+                    <a class="meta" th:href="@{/recepcion/citas/{id}(id=${a.id})}">Mensajes</a>
                     <form method="post" th:action="@{/recepcion/{id}/cancelar(id=${a.id})}">
                         <button class="btn ghost" type="submit">Cancelar</button>
                     </form>

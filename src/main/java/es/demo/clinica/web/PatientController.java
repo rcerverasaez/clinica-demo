@@ -5,6 +5,8 @@ import es.demo.clinica.booking.AppointmentService;
 import es.demo.clinica.booking.BookingException;
 import es.demo.clinica.documents.Document;
 import es.demo.clinica.documents.DocumentService;
+import es.demo.clinica.messages.MessageAuthor;
+import es.demo.clinica.messages.MessageService;
 import java.nio.charset.StandardCharsets;
 import org.springframework.http.ContentDisposition;
 import org.springframework.http.HttpHeaders;
@@ -19,18 +21,20 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 /**
- * «Mis citas»: el paciente consulta, cancela y descarga documentos con el código de confirmación, sin cuenta.
- * El código viaja en el cuerpo del formulario (POST), nunca en la URL.
+ * «Mis citas»: el paciente consulta, cancela, escribe a recepción y descarga documentos con el código de
+ * confirmación, sin cuenta. El código viaja en el cuerpo del formulario (POST), nunca en la URL.
  */
 @Controller
 public class PatientController {
 
     private final AppointmentService appointments;
     private final DocumentService documents;
+    private final MessageService messages;
 
-    public PatientController(AppointmentService appointments, DocumentService documents) {
+    public PatientController(AppointmentService appointments, DocumentService documents, MessageService messages) {
         this.appointments = appointments;
         this.documents = documents;
+        this.messages = messages;
     }
 
     @GetMapping("/mis-citas")
@@ -45,6 +49,7 @@ public class PatientController {
             Appointment appointment = appointments.findByCode(codigo);
             model.addAttribute("appointment", appointment);
             model.addAttribute("documents", documents.forAppointment(appointment.getId()));
+            model.addAttribute("messages", messages.forAppointment(appointment.getId()));
         } catch (BookingException e) {
             model.addAttribute("bookingError", e.getMessage());
         }
@@ -56,6 +61,18 @@ public class PatientController {
         try {
             appointments.cancelByCode(codigo);
             model.addAttribute("message", "Tu cita se ha cancelado.");
+        } catch (BookingException e) {
+            model.addAttribute("bookingError", e.getMessage());
+        }
+        return find(codigo, model);
+    }
+
+    @PostMapping("/mis-citas/mensajes")
+    public String write(@RequestParam String codigo, @RequestParam String body, Model model) {
+        try {
+            Appointment appointment = appointments.findByCode(codigo);
+            messages.send(appointment.getId(), MessageAuthor.PACIENTE, body);
+            model.addAttribute("message", "Mensaje enviado a recepción.");
         } catch (BookingException e) {
             model.addAttribute("bookingError", e.getMessage());
         }

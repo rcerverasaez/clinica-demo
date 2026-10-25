@@ -43,6 +43,26 @@
                 </li>
             </ul>
         </div>
+
+        <div>
+            <h3>Mensajes a recepción</h3>
+            <p class="empty" th:if="${messages.isEmpty()}">Todavía no has escrito a recepción.</p>
+            <ul th:unless="${messages.isEmpty()}">
+                <li th:each="m : ${messages}">
+                    <strong th:text="${m.author.name() == 'PACIENTE' ? 'Tú' : 'Recepción'}">Tú</strong>
+                    <small class="meta" th:text="${#temporals.format(m.createdAt, 'dd/MM HH:mm')}">01/01 10:00</small>
+                    <p th:text="${m.body}">Mensaje</p>
+                </li>
+            </ul>
+            <form class="form" method="post" th:action="@{/mis-citas/mensajes}">
+                <input type="hidden" name="codigo" th:value="${appointment.code}">
+                <label>
+                    Escribe a recepción
+                    <textarea name="body" rows="3" maxlength="500" required></textarea>
+                </label>
+                <button class="btn ghost" type="submit">Enviar mensaje</button>
+            </form>
+        </div>
     </section>
 </main>
 </body>
