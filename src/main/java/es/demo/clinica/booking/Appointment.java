@@ -4,19 +4,24 @@ import es.demo.clinica.catalog.Specialist;
 import es.demo.clinica.catalog.Treatment;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import java.time.LocalDateTime;
 
-/** Cita confirmada. */
+/** Cita de un paciente. */
 @Entity
 @Table(name = "appointments")
 public class Appointment {
 
     @Id
     private String id;
+
+    @Column(unique = true)
+    private String code;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "treatment_id")
@@ -38,22 +43,35 @@ public class Appointment {
     @Column(name = "end_at")
     private LocalDateTime endAt;
 
+    @Enumerated(EnumType.STRING)
+    private AppointmentStatus status;
+
     protected Appointment() {
     }
 
-    public Appointment(String id, Treatment treatment, Specialist specialist, String patientName,
+    public Appointment(String id, String code, Treatment treatment, Specialist specialist, String patientName,
             String patientEmail, LocalDateTime startAt) {
         this.id = id;
+        this.code = code;
         this.treatment = treatment;
         this.specialist = specialist;
         this.patientName = patientName;
         this.patientEmail = patientEmail;
         this.startAt = startAt;
         this.endAt = startAt.plusMinutes(treatment.getDurationMinutes());
+        this.status = AppointmentStatus.CONFIRMADA;
+    }
+
+    public void changeStatus(AppointmentStatus newStatus) {
+        this.status = newStatus;
     }
 
     public String getId() {
         return id;
+    }
+
+    public String getCode() {
+        return code;
     }
 
     public Treatment getTreatment() {
@@ -78,5 +96,9 @@ public class Appointment {
 
     public LocalDateTime getEndAt() {
         return endAt;
+    }
+
+    public AppointmentStatus getStatus() {
+        return status;
     }
 }

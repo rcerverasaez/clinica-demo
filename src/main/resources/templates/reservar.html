@@ -10,11 +10,51 @@
     <div class="alert ok" th:if="${confirmed}">
         <strong>Cita confirmada.</strong>
         <span th:text="${#temporals.format(confirmed.startAt, 'dd/MM/yyyy HH:mm')} + ' · ' + ${confirmed.treatment.name} + ' con ' + ${confirmed.specialist.name}">Cita</span>.
-        Te escribiremos a <span th:text="${confirmed.patientEmail}">correo</span>.
+        Tu código es <strong class="code" th:text="${confirmed.code}">ABCD1234</strong>.
+        Guárdalo para consultar o cancelar tu cita en <a th:href="@{/mis-citas}">Mis citas</a>.
     </div>
 
     <div class="alert error" th:if="${bookingError}" th:text="${bookingError}">Error</div>
 
+    <h2>1. Elige día y hueco</h2>
+    <form class="form" method="get" th:action="@{/reservar}">
+        <label>
+            Consulta
+            <select name="treatmentId">
+                <option value="">Elige una consulta</option>
+                <option th:each="t : ${treatments}" th:value="${t.id}" th:selected="${t.id == form.treatmentId}"
+                        th:text="${t.name} + ' (' + ${t.durationMinutes} + ' min)'">Consulta</option>
+            </select>
+        </label>
+
+        <label>
+            Especialista
+            <select name="specialistId">
+                <option value="">Elige especialista</option>
+                <option th:each="s : ${specialists}" th:value="${s.id}" th:selected="${s.id == form.specialistId}"
+                        th:text="${s.name} + ' · ' + ${s.specialty}">Especialista</option>
+            </select>
+        </label>
+
+        <label>
+            Día
+            <input type="date" name="date" th:value="${date}">
+        </label>
+
+        <button class="btn ghost" type="submit">Ver huecos libres</button>
+    </form>
+
+    <div th:if="${slots != null}">
+        <p class="empty" th:if="${slots.isEmpty()}">No quedan huecos ese día. Prueba con otra fecha o especialista.</p>
+        <ul class="slots" th:unless="${slots.isEmpty()}">
+            <li th:each="s : ${slots}">
+                <a class="btn ghost" th:href="@{/reservar(treatmentId=${form.treatmentId},specialistId=${form.specialistId},date=${date},start=${s})}"
+                   th:text="${#temporals.format(s, 'HH:mm')}">10:00</a>
+            </li>
+        </ul>
+    </div>
+
+    <h2>2. Tus datos</h2>
     <form class="form" method="post" th:action="@{/reservar}" th:object="${form}" novalidate>
         <label>
             Consulta

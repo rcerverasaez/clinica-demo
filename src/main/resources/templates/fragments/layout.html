@@ -12,7 +12,9 @@
     <nav>
         <a th:href="@{/}">Inicio</a>
         <a th:href="@{/reservar}">Reservar cita</a>
+        <a th:href="@{/mis-citas}">Mis citas</a>
         <a th:href="@{/recepcion}">Recepción</a>
+        <a th:if="${loggedIn}" th:href="@{/agenda}">Agenda</a>
         <form th:if="${loggedIn}" method="post" th:action="@{/logout}" class="inline">
             <button class="link" type="submit">Salir</button>
         </form>

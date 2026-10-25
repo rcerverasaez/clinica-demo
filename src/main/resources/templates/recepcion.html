@@ -16,6 +16,7 @@
                 <th>Fecha</th>
                 <th>Consulta</th>
                 <th>Especialista</th>
+                <th>Código</th>
                 <th>Paciente</th>
                 <th></th>
             </tr>
@@ -25,6 +26,7 @@
                 <td th:text="${#temporals.format(a.startAt, 'dd/MM HH:mm')}">01/01 10:00</td>
                 <td th:text="${a.treatment.name}">Consulta</td>
                 <td th:text="${a.specialist.name}">Especialista</td>
+                <td class="code" th:text="${a.code}">ABCD1234</td>
                 <td>
                     <span th:text="${a.patientName}">Nombre</span><br>
                     <small class="meta" th:text="${a.patientEmail}">correo</small>

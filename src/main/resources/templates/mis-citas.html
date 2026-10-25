@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Mis citas')}"></head>
+<body>
+<header class="top" th:replace="~{fragments/layout :: nav}"></header>
+
+<main class="narrow">
+    <h1>Mis citas</h1>
+    <p class="hint">Introduce el código de 8 caracteres que recibiste al reservar.</p>
+
+    <div class="alert ok" th:if="${message}" th:text="${message}">Mensaje</div>
+    <div class="alert error" th:if="${bookingError}" th:text="${bookingError}">Error</div>
+
+    <form class="form" method="get" th:action="@{/mis-citas}">
+        <label>
+            Código de cita
+            <input type="text" name="codigo" maxlength="8" required autocomplete="off" th:value="${codigo}">
+        </label>
+        <button class="btn" type="submit">Buscar</button>
+    </form>
+
+    <section class="card" th:if="${appointment}">
+        <h2 th:text="${appointment.treatment.name}">Consulta</h2>
+        <p>
+            <span th:text="${#temporals.format(appointment.startAt, 'dd/MM/yyyy HH:mm')}">01/01/2030 10:00</span>
+            con <span th:text="${appointment.specialist.name}">Especialista</span>
+        </p>
+        <p class="meta">Estado: <strong th:text="${appointment.status}">CONFIRMADA</strong></p>
+
+        <form th:if="${appointment.status.name() == 'CONFIRMADA'}" method="post" th:action="@{/mis-citas/cancelar}">
+            <input type="hidden" name="codigo" th:value="${appointment.code}">
+            <button class="btn ghost" type="submit">Cancelar cita</button>
+        </form>
+    </section>
+</main>
+</body>
+</html>

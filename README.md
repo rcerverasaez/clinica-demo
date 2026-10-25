@@ -5,10 +5,11 @@ Demo de una clínica para el curso de introducción a la IA. **Todos los datos s
 ## Qué incluye
 
 - Inicio con consultas y especialistas (`/`).
-- Formulario de reserva para el paciente, público (`/reservar`).
-- Vista de recepción con las citas próximas y cancelación (`/recepcion`). Requiere el rol RECEPCION.
-- Zona de especialista (`/agenda`). Requiere el rol ESPECIALISTA. Se completa en la fase 2.
-- Reglas de la clínica: horario de 9:00 a 18:00, de lunes a viernes, citas en punto o y media, sin solapes por especialista y solo en el futuro.
+- Reserva pública por huecos libres (`/reservar`): primero se elige consulta, especialista y día, y luego el hueco.
+- «Mis citas» (`/mis-citas`): el paciente consulta o cancela su cita con el código de 8 caracteres que recibe al reservar. No necesita cuenta.
+- Vista de recepción con las citas próximas, su código y cancelación (`/recepcion`). Requiere el rol RECEPCION.
+- Agenda del día para el especialista (`/agenda`): marca cada cita como atendida o no presentada y registra ausencias. Requiere el rol ESPECIALISTA.
+- Reglas de la clínica: horario de 9:00 a 18:00, de lunes a viernes, citas en punto o y media, sin solapes por especialista, sin ausencias del especialista y solo en el futuro.
 
 ## Requisitos
 
@@ -39,7 +40,7 @@ Lanzar los tests:
 | GET | `/api/specialists` | Público |
 | POST | `/api/appointments` | Público (422 si incumple las reglas) |
 | GET | `/api/appointments` | RECEPCION |
-| DELETE | `/api/appointments/{id}` | RECEPCION |
+| DELETE | `/api/appointments/{id}` | RECEPCION (la cita pasa a CANCELADA) |
 
 La documentación interactiva está en http://localhost:8080/swagger-ui.html y la especificación en `/v3/api-docs`.
 
@@ -57,3 +58,5 @@ Son cuentas ficticias de demo. Para cambiarlas, define `CLINICA_RECEPCION_PASSWO
 - La base de datos es H2 en memoria: los datos se pierden al reiniciar. El esquema lo crea Flyway (`src/main/resources/db/migration`).
 - Las citas de ejemplo se crean al arrancar. Para desactivarlas, usa `clinica.demo-data=false`.
 - No hay envío real de correos. El correo solo se muestra en la confirmación.
+- Las citas canceladas no se borran: pasan a estado `CANCELADA` y el hueco vuelve a quedar libre.
+- Estados de una cita: `CONFIRMADA`, `CANCELADA`, `ATENDIDA` y `NO_PRESENTADO`. La agenda solo cambia las confirmadas.

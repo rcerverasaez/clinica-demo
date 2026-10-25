@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Agenda')}"></head>
+<body>
+<header class="top" th:replace="~{fragments/layout :: nav}"></header>
+
+<main>
+    <h1>Agenda del día</h1>
+
+    <div class="alert ok" th:if="${message}" th:text="${message}">Mensaje</div>
+    <div class="alert error" th:if="${bookingError}" th:text="${bookingError}">Error</div>
+
+    <form class="form" method="get" th:action="@{/agenda}">
+        <label>
+            Día
+            <input type="date" name="date" th:value="${date}">
+        </label>
+        <button class="btn ghost" type="submit">Ver día</button>
+    </form>
+
+    <p class="empty" th:if="${#lists.isEmpty(appointments)}">No hay citas este día.</p>
+
+    <div class="table-wrap" th:unless="${#lists.isEmpty(appointments)}">
+        <table>
+            <thead>
+            <tr>
+                <th>Hora</th>
+                <th>Consulta</th>
+                <th>Especialista</th>
+                <th>Paciente</th>
+                <th>Estado</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="a : ${appointments}">
+                <td th:text="${#temporals.format(a.startAt, 'HH:mm')}">10:00</td>
+                <td th:text="${a.treatment.name}">Consulta</td>
+                <td th:text="${a.specialist.name}">Especialista</td>
+                <td th:text="${a.patientName}">Paciente</td>
+                <td th:text="${a.status}">CONFIRMADA</td>
+                <td>
+                    <form th:if="${a.status.name() == 'CONFIRMADA'}" method="post"
+                          th:action="@{/agenda/{id}/estado(id=${a.id})}">
+                        <input type="hidden" name="date" th:value="${date}">
+                        <button class="btn ghost" type="submit" name="status" value="ATENDIDA">Atendida</button>
+                        <button class="btn ghost" type="submit" name="status" value="NO_PRESENTADO">No presentado</button>
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <section class="card">
+        <h2>Registrar ausencia</h2>
+        <form class="form" method="post" th:action="@{/agenda/ausencias}">
+            <label>
+                Especialista
+                <select name="specialistId">
+                    <option th:each="s : ${specialists}" th:value="${s.id}" th:text="${s.name}">Especialista</option>
+                </select>
+            </label>
+            <label>
+                Desde
+                <input type="datetime-local" name="start" step="1800" required>
+            </label>
+            <label>
+                Hasta
+                <input type="datetime-local" name="end" step="1800" required>
+            </label>
+            <label>
+                Motivo
+                <input type="text" name="reason" maxlength="120" required>
+            </label>
+            <button class="btn" type="submit">Guardar ausencia</button>
+        </form>
+    </section>
+</main>
+</body>
+</html>

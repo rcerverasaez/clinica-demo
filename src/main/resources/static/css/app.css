@@ -230,3 +230,6 @@ td form { margin: 0; }
 }
 
 .top button.link:hover { color: var(--brand); }
+
+.code { font-family: ui-monospace, Menlo, monospace; letter-spacing: .08em; }
+.slots { display: flex; flex-wrap: wrap; gap: .5rem; list-style: none; padding: 0; }
