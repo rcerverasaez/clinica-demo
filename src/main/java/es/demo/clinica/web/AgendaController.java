@@ -1,9 +1,13 @@
 package es.demo.clinica.web;
 
+import es.demo.clinica.booking.Appointment;
 import es.demo.clinica.booking.AppointmentService;
 import es.demo.clinica.booking.AppointmentStatus;
 import es.demo.clinica.booking.BookingException;
 import es.demo.clinica.catalog.ClinicCatalog;
+import es.demo.clinica.documents.DocumentService;
+import java.io.IOException;
+import java.security.Principal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -13,18 +17,21 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-/** Agenda del día para especialistas: estado de cada cita y ausencias. */
+/** Agenda del día para especialistas: estado de cada cita, documentos y ausencias. */
 @Controller
 public class AgendaController {
 
     private final AppointmentService appointments;
     private final ClinicCatalog catalog;
+    private final DocumentService documents;
 
-    public AgendaController(AppointmentService appointments, ClinicCatalog catalog) {
+    public AgendaController(AppointmentService appointments, ClinicCatalog catalog, DocumentService documents) {
         this.appointments = appointments;
         this.catalog = catalog;
+        this.documents = documents;
     }
 
     @GetMapping("/agenda")
@@ -61,5 +68,33 @@ public class AgendaController {
             redirect.addFlashAttribute("bookingError", e.getMessage());
         }
         return "redirect:/agenda";
+    }
+
+    @GetMapping("/agenda/citas/{id}")
+    public String appointment(@PathVariable String id, Model model, RedirectAttributes redirect) {
+        try {
+            Appointment appointment = appointments.get(id);
+            model.addAttribute("appointment", appointment);
+            model.addAttribute("documents", documents.forAppointment(id));
+            return "agenda-cita";
+        } catch (BookingException e) {
+            redirect.addFlashAttribute("bookingError", e.getMessage());
+            return "redirect:/agenda";
+        }
+    }
+
+    @PostMapping("/agenda/citas/{id}/documentos")
+    public String upload(@PathVariable String id, @RequestParam("file") MultipartFile file, Principal principal,
+            RedirectAttributes redirect) {
+        try {
+            documents.upload(id, file.getOriginalFilename(), file.getContentType(), file.getBytes(),
+                    principal.getName());
+            redirect.addFlashAttribute("message", "Documento subido.");
+        } catch (BookingException e) {
+            redirect.addFlashAttribute("bookingError", e.getMessage());
+        } catch (IOException e) {
+            redirect.addFlashAttribute("bookingError", "No se pudo leer el archivo.");
+        }
+        return "redirect:/agenda/citas/" + id;
     }
 }

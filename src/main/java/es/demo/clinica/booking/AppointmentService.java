@@ -95,6 +95,11 @@ public class AppointmentService {
                 .orElseThrow(() -> new BookingException("No encontramos ninguna cita con ese código."));
     }
 
+    @Transactional(readOnly = true)
+    public Appointment get(String id) {
+        return repository.findById(id).orElseThrow(() -> new BookingException("La cita no existe."));
+    }
+
     /** Cancelar lo cambia a CANCELADA: la cita se conserva para el historial. */
     public void cancel(String id) {
         repository.findById(id).ifPresent(a -> a.changeStatus(AppointmentStatus.CANCELADA));

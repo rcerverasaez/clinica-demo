@@ -31,6 +31,18 @@
             <input type="hidden" name="codigo" th:value="${appointment.code}">
             <button class="btn ghost" type="submit">Cancelar cita</button>
         </form>
+
+        <div th:unless="${documents.isEmpty()}">
+            <h3>Documentos de tu cita</h3>
+            <ul>
+                <li th:each="d : ${documents}">
+                    <form method="post" th:action="@{/mis-citas/documentos/{id}(id=${d.id})}">
+                        <input type="hidden" name="codigo" th:value="${appointment.code}">
+                        <button class="link" type="submit" th:text="${d.fileName}">analitica.pdf</button>
+                    </form>
+                </li>
+            </ul>
+        </div>
     </section>
 </main>
 </body>

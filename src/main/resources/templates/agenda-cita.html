@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Cita')}"></head>
+<body>
+<header class="top" th:replace="~{fragments/layout :: nav}"></header>
+
+<main class="narrow">
+    <p><a th:href="@{/agenda}">← Volver a la agenda</a></p>
+    <h1 th:text="${appointment.treatment.name}">Consulta</h1>
+    <p>
+        <span th:text="${#temporals.format(appointment.startAt, 'dd/MM/yyyy HH:mm')}">01/01/2030 10:00</span>
+        con <span th:text="${appointment.specialist.name}">Especialista</span>
+    </p>
+    <p class="meta">
+        Paciente: <span th:text="${appointment.patientName}">Nombre</span> ·
+        Estado: <strong th:text="${appointment.status}">CONFIRMADA</strong>
+    </p>
+
+    <div class="alert ok" th:if="${message}" th:text="${message}">Mensaje</div>
+    <div class="alert error" th:if="${bookingError}" th:text="${bookingError}">Error</div>
+
+    <section class="card">
+        <h2>Documentos</h2>
+        <p class="empty" th:if="${documents.isEmpty()}">Todavía no hay documentos en esta cita.</p>
+        <ul th:unless="${documents.isEmpty()}">
+            <li th:each="d : ${documents}">
+                <span th:text="${d.fileName}">analitica.pdf</span>
+                <small class="meta" th:text="${#temporals.format(d.uploadedAt, 'dd/MM HH:mm')} + ' · ' + ${d.uploadedBy}">01/01 10:00 · especialista</small>
+            </li>
+        </ul>
+
+        <form class="form" method="post" enctype="multipart/form-data"
+              th:action="@{/agenda/citas/{id}/documentos(id=${appointment.id})}">
+            <label>
+                Subir documento (PDF, JPG o PNG, máximo 2 MB)
+                <input type="file" name="file" accept="application/pdf,image/jpeg,image/png" required>
+            </label>
+            <button class="btn" type="submit">Subir documento</button>
+        </form>
+    </section>
+</main>
+</body>
+</html>

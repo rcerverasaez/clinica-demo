@@ -25,7 +25,7 @@ class SecurityConfig {
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(csrf -> csrf.ignoringRequestMatchers("/api/**"));
         http.authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/", "/reservar", "/login", "/css/**", "/error", "/actuator/health", "/mis-citas", "/mis-citas/cancelar", "/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
+                        .requestMatchers("/", "/reservar", "/login", "/css/**", "/error", "/actuator/health", "/mis-citas", "/mis-citas/**", "/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/treatments", "/api/specialists").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/appointments").permitAll()
                         .requestMatchers("/api/**").hasRole("RECEPCION")

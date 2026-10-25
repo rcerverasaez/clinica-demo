@@ -40,6 +40,7 @@
                 <td th:text="${a.patientName}">Paciente</td>
                 <td th:text="${a.status}">CONFIRMADA</td>
                 <td>
+                    <a class="meta" th:href="@{/agenda/citas/{id}(id=${a.id})}">Detalle</a>
                     <form th:if="${a.status.name() == 'CONFIRMADA'}" method="post"
                           th:action="@{/agenda/{id}/estado(id=${a.id})}">
                         <input type="hidden" name="date" th:value="${date}">
