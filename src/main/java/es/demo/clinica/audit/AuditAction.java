@@ -11,5 +11,6 @@ public enum AuditAction {
     DOCUMENT_UPLOAD,
     STATUS_CHANGE,
     ABSENCE,
-    REMINDERS
+    REMINDERS,
+    CATALOG
 }

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html th:lang="${#locale.language}" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head(#{title.catalog})}"></head>
+<body>
+<header class="top" th:replace="~{fragments/layout :: nav}"></header>
+
+<main id="contenido">
+    <p><a th:href="@{/recepcion}" th:text="#{common.back-upcoming}">← Volver a citas próximas</a></p>
+    <h1 th:text="#{catalog.title}">Catálogo de la clínica</h1>
+    <p class="hint" th:text="#{catalog.hint}">Lo que añadas aquí aparece de inmediato en la reserva y en la portada.</p>
+
+    <div class="alert ok" role="status" th:if="${message}" th:text="#{${message}}">Mensaje</div>
+    <div class="alert error" role="alert" th:if="${bookingError}" th:text="#{${bookingError}}">Error</div>
+
+    <h2 th:text="#{catalog.specialists}">Especialistas</h2>
+    <div class="table-wrap" tabindex="0">
+        <table>
+            <thead>
+            <tr>
+                <th scope="col" th:text="#{common.name}">Nombre</th>
+                <th scope="col" th:text="#{catalog.specialty}">Especialidad</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="s : ${specialists}">
+                <td th:text="${s.name}">Especialista</td>
+                <td th:text="${s.specialty}">Especialidad</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <h2 th:text="#{catalog.treatments}">Consultas</h2>
+    <div class="table-wrap" tabindex="0">
+        <table>
+            <thead>
+            <tr>
+                <th scope="col" th:text="#{common.name}">Nombre</th>
+                <th scope="col" th:text="#{catalog.duration}">Duración</th>
+                <th scope="col" th:text="#{catalog.price}">Precio</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="t : ${treatments}">
+                <td th:text="${t.name}">Consulta</td>
+                <td th:text="#{home.minutes(${t.durationMinutes})}">30 min</td>
+                <td th:text="${#strings.concat(t.price, ' €')}">60,00 €</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <section class="card">
+        <h2 th:text="#{catalog.add-specialist}">Añadir especialista</h2>
+        <form class="form" method="post" th:action="@{/recepcion/catalogo/especialistas}">
+            <label>
+                <span th:text="#{common.name}">Nombre</span>
+                <input type="text" name="name" maxlength="120" required>
+            </label>
+            <label>
+                <span th:text="#{catalog.specialty}">Especialidad</span>
+                <input type="text" name="specialty" maxlength="120" required>
+            </label>
+            <button class="btn" type="submit" th:text="#{catalog.save}">Guardar</button>
+        </form>
+    </section>
+
+    <section class="card">
+        <h2 th:text="#{catalog.add-treatment}">Añadir consulta</h2>
+        <form class="form" method="post" th:action="@{/recepcion/catalogo/consultas}">
+            <label>
+                <span th:text="#{common.name}">Nombre</span>
+                <input type="text" name="name" maxlength="120" required>
+            </label>
+            <label>
+                <span th:text="#{catalog.duration}">Duración</span>
+                <input type="number" name="durationMinutes" min="5" max="240" step="5" value="30" required>
+            </label>
+            <label>
+                <span th:text="#{catalog.price}">Precio</span>
+                <input type="number" name="price" min="0" max="999999.99" step="0.01" required>
+            </label>
+            <button class="btn" type="submit" th:text="#{catalog.save}">Guardar</button>
+        </form>
+    </section>
+</main>
+</body>
+</html>

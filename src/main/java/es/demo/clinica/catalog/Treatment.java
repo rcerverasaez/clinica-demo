@@ -24,6 +24,13 @@ public class Treatment {
     protected Treatment() {
     }
 
+    public Treatment(String id, String name, int durationMinutes, BigDecimal price) {
+        this.id = id;
+        this.name = name;
+        this.durationMinutes = durationMinutes;
+        this.price = price;
+    }
+
     public String getId() {
         return id;
     }

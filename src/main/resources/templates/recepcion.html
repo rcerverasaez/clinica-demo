@@ -7,7 +7,7 @@
 <main id="contenido">
     <h1 th:text="#{reception.title}">Citas próximas</h1>
 
-    <p><a th:href="@{/recepcion/buzon}" th:text="#{reception.outbox}">Buzón de recordatorios</a> · <a th:href="@{/recepcion/panel}" th:text="#{reception.panel}">Panel</a> · <a th:href="@{/recepcion/auditoria}" th:text="#{reception.audit}">Registro</a></p>
+    <p><a th:href="@{/recepcion/buzon}" th:text="#{reception.outbox}">Buzón de recordatorios</a> · <a th:href="@{/recepcion/panel}" th:text="#{reception.panel}">Panel</a> · <a th:href="@{/recepcion/auditoria}" th:text="#{reception.audit}">Registro</a> · <a th:href="@{/recepcion/catalogo}" th:text="#{reception.catalog}">Catálogo</a></p>
 
     <p class="empty" th:if="${#lists.isEmpty(appointments)}" th:text="#{reception.none}">No hay citas próximas.</p>
 
