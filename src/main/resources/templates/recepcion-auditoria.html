@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Auditoría')}"></head>
+<body>
+<header class="top" th:replace="~{fragments/layout :: nav}"></header>
+
+<main>
+    <p><a th:href="@{/recepcion}">← Volver a citas próximas</a></p>
+    <h1>Registro de acciones</h1>
+    <p class="hint">Últimas 200 acciones. El detalle no incluye nombres, correos ni códigos de cita.</p>
+
+    <p class="empty" th:if="${events.isEmpty()}">Todavía no hay acciones registradas.</p>
+
+    <div class="table-wrap" th:unless="${events.isEmpty()}">
+        <table>
+            <thead>
+            <tr>
+                <th>Cuándo</th>
+                <th>Quién</th>
+                <th>Acción</th>
+                <th>Objetivo</th>
+                <th>Detalle</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="e : ${events}">
+                <td th:text="${#temporals.format(e.occurredAt, 'dd/MM HH:mm:ss')}">01/01 10:00:00</td>
+                <td th:text="${e.actor}">recepcion</td>
+                <td th:text="${e.type.label}">Reserva</td>
+                <td class="code" th:text="${e.target}">cita</td>
+                <td th:text="${e.detail}">Detalle</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</main>
+</body>
+</html>

@@ -1,5 +1,7 @@
 package es.demo.clinica.web;
 
+import es.demo.clinica.audit.AuditAction;
+import es.demo.clinica.audit.AuditService;
 import es.demo.clinica.booking.Appointment;
 import es.demo.clinica.booking.AppointmentService;
 import es.demo.clinica.booking.AppointmentStatus;
@@ -27,11 +29,14 @@ public class AgendaController {
     private final AppointmentService appointments;
     private final ClinicCatalog catalog;
     private final DocumentService documents;
+    private final AuditService audit;
 
-    public AgendaController(AppointmentService appointments, ClinicCatalog catalog, DocumentService documents) {
+    public AgendaController(AppointmentService appointments, ClinicCatalog catalog, DocumentService documents,
+            AuditService audit) {
         this.appointments = appointments;
         this.catalog = catalog;
         this.documents = documents;
+        this.audit = audit;
     }
 
     @GetMapping("/agenda")
@@ -46,10 +51,11 @@ public class AgendaController {
 
     @PostMapping("/agenda/{id}/estado")
     public String changeStatus(@PathVariable String id, @RequestParam AppointmentStatus status,
-            @RequestParam LocalDate date, RedirectAttributes redirect) {
+            @RequestParam LocalDate date, Principal principal, RedirectAttributes redirect) {
         redirect.addAttribute("date", date);
         try {
             appointments.changeStatus(id, status);
+            audit.record(principal.getName(), AuditAction.STATUS_CHANGE, id, "Nuevo estado: " + status.name());
         } catch (BookingException e) {
             redirect.addFlashAttribute("bookingError", e.getMessage());
         }
@@ -60,9 +66,10 @@ public class AgendaController {
     public String addAbsence(@RequestParam String specialistId,
             @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm") LocalDateTime start,
             @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm") LocalDateTime end,
-            @RequestParam String reason, RedirectAttributes redirect) {
+            @RequestParam String reason, Principal principal, RedirectAttributes redirect) {
         try {
             appointments.addAbsence(specialistId, start, end, reason);
+            audit.record(principal.getName(), AuditAction.ABSENCE, specialistId, "Ausencia registrada");
             redirect.addFlashAttribute("message", "Ausencia registrada.");
         } catch (BookingException e) {
             redirect.addFlashAttribute("bookingError", e.getMessage());
@@ -89,6 +96,7 @@ public class AgendaController {
         try {
             documents.upload(id, file.getOriginalFilename(), file.getContentType(), file.getBytes(),
                     principal.getName());
+            audit.record(principal.getName(), AuditAction.DOCUMENT_UPLOAD, id, "Documento adjunto");
             redirect.addFlashAttribute("message", "Documento subido.");
         } catch (BookingException e) {
             redirect.addFlashAttribute("bookingError", e.getMessage());

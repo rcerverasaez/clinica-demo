@@ -1,5 +1,7 @@
 package es.demo.clinica.web;
 
+import es.demo.clinica.audit.AuditAction;
+import es.demo.clinica.audit.AuditService;
 import es.demo.clinica.booking.Appointment;
 import es.demo.clinica.booking.AppointmentService;
 import es.demo.clinica.booking.BookingException;
@@ -30,11 +32,14 @@ public class PatientController {
     private final AppointmentService appointments;
     private final DocumentService documents;
     private final MessageService messages;
+    private final AuditService audit;
 
-    public PatientController(AppointmentService appointments, DocumentService documents, MessageService messages) {
+    public PatientController(AppointmentService appointments, DocumentService documents, MessageService messages,
+            AuditService audit) {
         this.appointments = appointments;
         this.documents = documents;
         this.messages = messages;
+        this.audit = audit;
     }
 
     @GetMapping("/mis-citas")
@@ -59,7 +64,10 @@ public class PatientController {
     @PostMapping("/mis-citas/cancelar")
     public String cancel(@RequestParam String codigo, Model model) {
         try {
+            Appointment appointment = appointments.findByCode(codigo);
             appointments.cancelByCode(codigo);
+            audit.record(AuditService.PATIENT_ACTOR, AuditAction.CANCELLATION, appointment.getId(),
+                    "Cancelada por el paciente");
             model.addAttribute("message", "Tu cita se ha cancelado.");
         } catch (BookingException e) {
             model.addAttribute("bookingError", e.getMessage());
@@ -72,6 +80,7 @@ public class PatientController {
         try {
             Appointment appointment = appointments.findByCode(codigo);
             messages.send(appointment.getId(), MessageAuthor.PACIENTE, body);
+            audit.record(AuditService.PATIENT_ACTOR, AuditAction.MESSAGE, appointment.getId(), "Mensaje del paciente");
             model.addAttribute("message", "Mensaje enviado a recepción.");
         } catch (BookingException e) {
             model.addAttribute("bookingError", e.getMessage());

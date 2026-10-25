@@ -1,5 +1,7 @@
 package es.demo.clinica.booking;
 
+import es.demo.clinica.audit.AuditAction;
+import es.demo.clinica.audit.AuditService;
 import es.demo.clinica.catalog.ClinicCatalog;
 import jakarta.validation.Valid;
 import java.time.LocalDate;
@@ -21,10 +23,12 @@ public class BookingController {
 
     private final AppointmentService appointments;
     private final ClinicCatalog catalog;
+    private final AuditService audit;
 
-    public BookingController(AppointmentService appointments, ClinicCatalog catalog) {
+    public BookingController(AppointmentService appointments, ClinicCatalog catalog, AuditService audit) {
         this.appointments = appointments;
         this.catalog = catalog;
+        this.audit = audit;
     }
 
     @GetMapping("/reservar")
@@ -56,6 +60,7 @@ public class BookingController {
         }
         try {
             Appointment appointment = appointments.book(form);
+            audit.record(AuditService.PUBLIC_ACTOR, AuditAction.BOOKING, appointment.getId(), "Reserva desde la web");
             redirect.addFlashAttribute("confirmed", appointment);
             return "redirect:/reservar";
         } catch (BookingException e) {

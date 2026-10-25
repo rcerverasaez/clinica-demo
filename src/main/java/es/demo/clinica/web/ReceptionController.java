@@ -1,10 +1,13 @@
 package es.demo.clinica.web;
 
+import es.demo.clinica.audit.AuditAction;
+import es.demo.clinica.audit.AuditService;
 import es.demo.clinica.booking.Appointment;
 import es.demo.clinica.booking.AppointmentService;
 import es.demo.clinica.booking.BookingException;
 import es.demo.clinica.messages.MessageAuthor;
 import es.demo.clinica.messages.MessageService;
+import java.security.Principal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,10 +22,12 @@ public class ReceptionController {
 
     private final AppointmentService appointments;
     private final MessageService messages;
+    private final AuditService audit;
 
-    public ReceptionController(AppointmentService appointments, MessageService messages) {
+    public ReceptionController(AppointmentService appointments, MessageService messages, AuditService audit) {
         this.appointments = appointments;
         this.messages = messages;
+        this.audit = audit;
     }
 
     @GetMapping("/recepcion")
@@ -32,8 +37,9 @@ public class ReceptionController {
     }
 
     @PostMapping("/recepcion/{id}/cancelar")
-    public String cancel(@PathVariable String id) {
+    public String cancel(@PathVariable String id, Principal principal) {
         appointments.cancel(id);
+        audit.record(principal.getName(), AuditAction.CANCELLATION, id, "Cancelada desde recepción");
         return "redirect:/recepcion";
     }
 
@@ -51,9 +57,11 @@ public class ReceptionController {
     }
 
     @PostMapping("/recepcion/citas/{id}/mensajes")
-    public String reply(@PathVariable String id, @RequestParam String body, RedirectAttributes redirect) {
+    public String reply(@PathVariable String id, @RequestParam String body, Principal principal,
+            RedirectAttributes redirect) {
         try {
             messages.send(id, MessageAuthor.RECEPCION, body);
+            audit.record(principal.getName(), AuditAction.MESSAGE, id, "Respuesta de recepción");
         } catch (BookingException e) {
             redirect.addFlashAttribute("bookingError", e.getMessage());
         }

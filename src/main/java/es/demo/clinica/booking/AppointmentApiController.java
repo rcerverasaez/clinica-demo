@@ -1,9 +1,12 @@
 package es.demo.clinica.booking;
 
+import es.demo.clinica.audit.AuditAction;
+import es.demo.clinica.audit.AuditService;
 import es.demo.clinica.catalog.ClinicCatalog;
 import es.demo.clinica.catalog.Specialist;
 import es.demo.clinica.catalog.Treatment;
 import jakarta.validation.Valid;
+import java.security.Principal;
 import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -23,10 +26,12 @@ public class AppointmentApiController {
 
     private final ClinicCatalog catalog;
     private final AppointmentService appointments;
+    private final AuditService audit;
 
-    public AppointmentApiController(ClinicCatalog catalog, AppointmentService appointments) {
+    public AppointmentApiController(ClinicCatalog catalog, AppointmentService appointments, AuditService audit) {
         this.catalog = catalog;
         this.appointments = appointments;
+        this.audit = audit;
     }
 
     @GetMapping("/api/treatments")
@@ -45,7 +50,9 @@ public class AppointmentApiController {
     @ResponseStatus(HttpStatus.CREATED)
     @Operation(summary = "Reserva una cita", description = "Devuelve 422 si la reserva incumple las reglas de la clínica.")
     public Appointment book(@Valid @RequestBody BookingForm form) {
-        return appointments.book(form);
+        Appointment appointment = appointments.book(form);
+        audit.record(AuditService.API_ACTOR, AuditAction.BOOKING, appointment.getId(), "Reserva por API");
+        return appointment;
     }
 
     @GetMapping("/api/appointments")
@@ -57,7 +64,8 @@ public class AppointmentApiController {
     @DeleteMapping("/api/appointments/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @Operation(summary = "Cancela una cita (solo recepción)")
-    public void cancel(@PathVariable String id) {
+    public void cancel(@PathVariable String id, Principal principal) {
         appointments.cancel(id);
+        audit.record(principal.getName(), AuditAction.CANCELLATION, id, "Cancelada por API");
     }
 }

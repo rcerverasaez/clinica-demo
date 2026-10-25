@@ -1,5 +1,7 @@
 package es.demo.clinica.notifications;
 
+import es.demo.clinica.audit.AuditAction;
+import es.demo.clinica.audit.AuditService;
 import es.demo.clinica.booking.Appointment;
 import es.demo.clinica.booking.AppointmentRepository;
 import es.demo.clinica.booking.AppointmentStatus;
@@ -27,11 +29,14 @@ public class ReminderService {
     private final AppointmentRepository appointments;
     private final NotificationRepository notifications;
     private final Clock clock;
+    private final AuditService audit;
 
-    public ReminderService(AppointmentRepository appointments, NotificationRepository notifications, Clock clock) {
+    public ReminderService(AppointmentRepository appointments, NotificationRepository notifications, Clock clock,
+            AuditService audit) {
         this.appointments = appointments;
         this.notifications = notifications;
         this.clock = clock;
+        this.audit = audit;
     }
 
     /** Devuelve cuántos recordatorios nuevos se han guardado en el buzón. */
@@ -48,6 +53,9 @@ public class ReminderService {
                     subject(appointment), body(appointment), now));
             log.info("Recordatorio simulado guardado para la cita {}", appointment.getId());
             sent++;
+        }
+        if (sent > 0) {
+            audit.record(AuditService.SYSTEM_ACTOR, AuditAction.REMINDERS, null, "Recordatorios nuevos: " + sent);
         }
         return sent;
     }
