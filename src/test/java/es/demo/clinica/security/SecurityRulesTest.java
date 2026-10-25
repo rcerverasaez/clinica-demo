@@ -29,6 +29,11 @@ class SecurityRulesTest {
     }
 
     @Test
+    void theStaffLoginPageIsShown() throws Exception {
+        mvc.perform(get("/login")).andExpect(status().isOk());
+    }
+
+    @Test
     void receptionRequiresLogin() throws Exception {
         mvc.perform(get("/recepcion"))
                 .andExpect(status().is3xxRedirection())
