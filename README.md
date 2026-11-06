@@ -4,35 +4,41 @@ Demo de una clínica para el curso de introducción a la IA. **Todos los datos s
 
 **Material didáctico:** el proyecto contiene errores y situaciones preparados para las prácticas. No está destinado a producción ni debe utilizarse con pacientes o datos reales. Las cuentas, contraseñas y claves de ejemplo son ficticias.
 
-## Descargar la versión del curso
+## Tu copia para el curso
 
-La versión de partida es **`curso-ivi-v1.0.0`**. No necesitas una cuenta de GitHub para descargar este repositorio público.
+La versión de partida es **`curso-ivi-v1.0.0`**. Para realizar las prácticas y subir tus cambios, crea un **fork**: una copia del repositorio dentro de tu propia cuenta de GitHub. La cuenta de GitHub es independiente de la cuenta de ChatGPT Free que utilizarás con Codex.
 
-### Con Git
+### Preparación con Git y GitHub
+
+1. Ten Git instalado y crea una cuenta de GitHub si todavía no tienes una.
+2. Abre [el repositorio del curso](https://github.com/rcerverasaez/clinica-demo) y pulsa **Fork** para crear tu copia. Conserva el nombre `clinica-demo`.
+3. Clona **tu fork**, sustituyendo `TU_USUARIO` por tu usuario de GitHub:
 
 ```bash
-git clone --branch curso-ivi-v1.0.0 --depth 1 https://github.com/rcerverasaez/clinica-demo.git
+git clone https://github.com/TU_USUARIO/clinica-demo.git
 cd clinica-demo
 ```
 
-Así obtienes la versión concreta del curso, aunque el proyecto cambie más adelante. Git puede avisar de que estás en `detached HEAD` porque has descargado una etiqueta: puedes modificar archivos y revisar el diff con normalidad.
+4. Abre esa carpeta en Cursor o VS Code y configura la autenticación de GitHub para poder subir cambios. Puedes utilizar la integración de GitHub de tu editor. Si utilizas HTTPS desde la terminal, GitHub requiere un gestor de credenciales o un token; la contraseña de tu cuenta no sirve para Git.
 
-### Como ZIP
+Cuando hayas revisado un cambio, guárdalo en tu copia:
+
+```bash
+git diff
+git add ruta/del/archivo
+git commit -m "Describe el cambio realizado"
+git push origin main
+```
+
+Sustituye `ruta/del/archivo` por cada archivo que hayas revisado. El push va a tu fork, no al repositorio original del curso. Si Git solicita tu nombre y correo, configúralos antes de repetir el commit.
+
+Prepara el fork, la clonación y la autenticación antes de la sesión. Comprueba con `git remote -v` que `origin` apunta a `TU_USUARIO/clinica-demo`.
+
+### ZIP como alternativa de descarga
 
 [Descargar clinica-demo — versión del curso](https://github.com/rcerverasaez/clinica-demo/releases/download/curso-ivi-v1.0.0/clinica-demo-curso-ivi-v1.0.0.zip).
 
-Descomprime el archivo y abre la carpeta `clinica-demo` en Cursor o VS Code. El ZIP incluye el mismo código y las mismas instrucciones que la versión de Git, pero no incluye el historial.
-
-Para revisar cambios con Git en la copia del ZIP, crea un punto de partida antes de editar:
-
-```bash
-cd clinica-demo
-git init
-git add .
-git commit -m "Punto de partida del curso"
-```
-
-Si Git solicita tu nombre y correo, configúralos en esa carpeta antes de repetir el commit. No necesitas subir tus cambios a GitHub.
+Descomprime el archivo y abre la carpeta `clinica-demo` en el editor. El ZIP contiene el código de la versión del curso y permite seguir la demostración, pero no incluye historial ni un repositorio propio al que subir cambios. Para las prácticas de commit y push, utiliza el fork y la clonación indicados arriba.
 
 ### Preparar las dependencias
 
