@@ -2,6 +2,49 @@
 
 Demo de una clínica para el curso de introducción a la IA. **Todos los datos son ficticios.** No usa datos ni marca de ninguna empresa real.
 
+**Material didáctico:** el proyecto contiene errores y situaciones preparados para las prácticas. No está destinado a producción ni debe utilizarse con pacientes o datos reales. Las cuentas, contraseñas y claves de ejemplo son ficticias.
+
+## Descargar la versión del curso
+
+La versión de partida es **`curso-ivi-v1.0.0`**. No necesitas una cuenta de GitHub para descargar este repositorio público.
+
+### Con Git
+
+```bash
+git clone --branch curso-ivi-v1.0.0 --depth 1 https://github.com/rcerverasaez/clinica-demo.git
+cd clinica-demo
+```
+
+Así obtienes la versión concreta del curso, aunque el proyecto cambie más adelante. Git puede avisar de que estás en `detached HEAD` porque has descargado una etiqueta: puedes modificar archivos y revisar el diff con normalidad.
+
+### Como ZIP
+
+[Descargar clinica-demo — versión del curso](https://github.com/rcerverasaez/clinica-demo/releases/download/curso-ivi-v1.0.0/clinica-demo-curso-ivi-v1.0.0.zip).
+
+Descomprime el archivo y abre la carpeta `clinica-demo` en Cursor o VS Code. El ZIP incluye el mismo código y las mismas instrucciones que la versión de Git, pero no incluye el historial.
+
+Para revisar cambios con Git en la copia del ZIP, crea un punto de partida antes de editar:
+
+```bash
+cd clinica-demo
+git init
+git add .
+git commit -m "Punto de partida del curso"
+```
+
+Si Git solicita tu nombre y correo, configúralos en esa carpeta antes de repetir el commit. No necesitas subir tus cambios a GitHub.
+
+### Preparar las dependencias
+
+Con JDK 17 o superior instalado, ejecuta desde la carpeta del proyecto, antes de la sesión:
+
+```bash
+./mvnw -B dependency:go-offline
+```
+
+En Windows (PowerShell o CMD), utiliza `mvnw.cmd` en lugar de `./mvnw`. La primera descarga requiere conexión a internet. El proyecto incluye el wrapper de Maven: no necesitas instalar Maven por separado.
+
+
 ## Qué incluye
 
 - Inicio con consultas y especialistas (`/`).
@@ -33,6 +76,8 @@ Lanzar los tests:
 ```bash
 ./mvnw test
 ```
+
+El estado de partida contiene fallos preparados para las prácticas. Algunas pruebas pueden fallar antes de que hagas cambios: registra el resultado inicial para distinguir los fallos previos de los nuevos.
 
 ## Con Docker
 
