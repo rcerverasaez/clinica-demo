@@ -174,3 +174,5 @@ GitHub Actions ejecuta `./mvnw verify` en cada push y en cada pull request (`.gi
 - El registro de acciones no guarda nombres, correos ni códigos de cita.
 - Las citas canceladas no se borran: pasan a estado `CANCELADA` y el hueco vuelve a quedar libre.
 - Estados de una cita: `CONFIRMADA`, `CANCELADA`, `ATENDIDA` y `NO_PRESENTADO`. La agenda solo cambia las confirmadas.
+
+Línea añadida para la prueba de Git.
