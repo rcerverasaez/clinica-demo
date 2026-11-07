@@ -6,22 +6,28 @@ Demo de una clínica para el curso de introducción a la IA. **Todos los datos s
 
 ## Tu copia para el curso
 
-La versión de partida es **`curso-ivi-v1.0.0`**. Para realizar las prácticas y subir tus cambios, trabajarás en este mismo repositorio como colaborador. La cuenta de GitHub es independiente de la cuenta de ChatGPT Free que utilizarás con Codex.
+La versión de partida es **`curso-ivi-v1.0.0`**. Para las prácticas y para subir tus cambios no necesitas cuenta de GitHub: el ponente te dará un **token**, una clave de acceso que solo sirve para este repositorio de prueba. Es independiente de la cuenta de ChatGPT Free que utilizarás con Codex.
 
-### Preparación con Git y GitHub
+### Descargar el proyecto
 
-1. Ten Git instalado y crea una cuenta de GitHub si todavía no tienes una.
-2. Facilita al ponente tu usuario de GitHub o el correo de esa cuenta y acepta la invitación como colaborador que recibirás.
-3. Clona el repositorio:
+Necesitas Git instalado. En Cursor o VS Code, abre una terminal (**Terminal → New Terminal**) y ejecuta:
 
 ```bash
-git clone https://github.com/rcerverasaez/clinica-demo.git
+# Ve a tu carpeta de Descargas
+cd ~/Downloads
+
+# Descarga el proyecto, cambiando TOKEN por el que has recibido
+git clone https://alumno:TOKEN@github.com/rcerverasaez/clinica-demo.git
+
+# Entra en la carpeta del proyecto
 cd clinica-demo
+
+# Escribe tu nombre, que aparecerá en tus cambios. El correo puede ser inventado
+git config user.name "Tu nombre"
+git config user.email "tu-nombre@example.com"
 ```
 
-4. Abre esa carpeta en Cursor o VS Code y configura la autenticación de GitHub para poder subir cambios. Puedes utilizar la integración de GitHub de tu editor. Si utilizas HTTPS desde la terminal, GitHub requiere un gestor de credenciales o un token; la contraseña de tu cuenta no sirve para Git.
-
-Prepara la invitación, la clonación y la autenticación antes de la sesión. Comprueba con `git remote -v` que `origin` apunta a `rcerverasaez/clinica-demo`.
+Usa el token solo para este comando: no lo pegues en el chat de Codex ni lo publiques. Después abre la carpeta `Descargas/clinica-demo` en el editor (**File → Open Folder**).
 
 ### Subir tus cambios
 
@@ -42,7 +48,7 @@ git commit -m "Describe el cambio realizado"
 git push -u origin tu-nombre
 ```
 
-Sustituye `tu-nombre` por el nombre de tu rama y `ruta/del/archivo` por cada archivo que hayas revisado. Si Git solicita tu nombre y correo, configúralos antes de repetir el commit.
+Sustituye `tu-nombre` por el nombre de tu rama y `ruta/del/archivo` por cada archivo que hayas revisado. No hace falta iniciar sesión: el token del clon ya da permiso para subir. También puedes pedírselo a Codex, que te pedirá aprobar cada comando de Git con «Permitir una vez».
 
 ### ZIP como alternativa de descarga
 
