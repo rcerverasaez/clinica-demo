@@ -8,6 +8,14 @@
       "windows": { "command": ".\\mvnw.cmd spring-boot:run" },
       "problemMatcher": [],
       "presentation": { "panel": "dedicated" }
+    },
+    {
+      "label": "Abrir Clínica Demo en el navegador",
+      "type": "shell",
+      "command": "open http://localhost:8080",
+      "windows": { "command": "start http://localhost:8080" },
+      "problemMatcher": [],
+      "presentation": { "reveal": "never" }
     }
   ]
 }
