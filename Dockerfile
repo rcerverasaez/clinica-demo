@@ -11,5 +11,5 @@ WORKDIR /app
 RUN groupadd --system clinica && useradd --system --gid clinica clinica
 COPY --from=build /app/target/clinica-demo-*.jar app.jar
 USER clinica
-EXPOSE 8080
+EXPOSE 8765
 ENTRYPOINT ["java", "-jar", "/app/app.jar"]

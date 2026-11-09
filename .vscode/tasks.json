@@ -12,8 +12,8 @@
     {
       "label": "Abrir Clínica Demo en el navegador",
       "type": "shell",
-      "command": "open http://localhost:8080",
-      "windows": { "command": "start http://localhost:8080" },
+      "command": "open http://localhost:8765",
+      "windows": { "command": "start http://localhost:8765" },
       "problemMatcher": [],
       "presentation": { "reveal": "never" }
     }

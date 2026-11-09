@@ -91,7 +91,7 @@ Arrancar la app:
 ./mvnw spring-boot:run
 ```
 
-Abrir http://localhost:8080 en el navegador. La interfaz arranca en español; para verla en inglés, añade `?lang=en` a la dirección o pulsa el enlace *English* de la cabecera (`?lang=es` vuelve al español).
+Abrir http://localhost:8765 en el navegador. La interfaz arranca en español; para verla en inglés, añade `?lang=en` a la dirección o pulsa el enlace *English* de la cabecera (`?lang=es` vuelve al español).
 
 Lanzar los tests:
 
@@ -109,7 +109,7 @@ Si tienes Docker en marcha, puedes arrancar la app sin tener Java instalado:
 docker compose up --build
 ```
 
-Abre http://localhost:8080. Para cambiar las contraseñas de demo, copia `.env.example` a `.env` y edita los valores. El fichero `.env` no se sube al repositorio.
+Abre http://localhost:8765. Para cambiar las contraseñas de demo, copia `.env.example` a `.env` y edita los valores. El fichero `.env` no se sube al repositorio.
 
 ## Si algo falla
 
@@ -118,7 +118,7 @@ Es normal que algo falle al instalar: cada equipo tiene su propia versión de Ja
 | Síntoma | Causa probable | Qué hacer |
 |---|---|---|
 | `class file has wrong version 61.0, should be 52.0` o `UnsupportedClassVersionError` | Maven está usando un Java anterior a 17 | Comprueba `java -version`, apunta `JAVA_HOME` a un JDK 17 o superior y vuelve a lanzar el comando. |
-| `Port 8080 was already in use` | Otro programa está usando el puerto 8080 | Cierra ese programa o arranca con `./mvnw spring-boot:run -Dspring-boot.run.arguments=--server.port=8081` y abre http://localhost:8081. |
+| `Port 8765 was already in use` | Otro programa está usando el puerto 8765 | Cierra ese programa o arranca con `./mvnw spring-boot:run -Dspring-boot.run.arguments=--server.port=8766` y abre http://localhost:8766. |
 | `Cannot connect to the Docker daemon` | Docker no está en marcha | Abre Docker Desktop (o arranca el servicio de Docker) y vuelve a lanzar `docker compose up --build`. |
 | `Could not resolve dependencies` o `Could not transfer artifact` | No hay conexión a internet, o la red bloquea las descargas | Comprueba la conexión y vuelve a lanzar el comando. En una red de empresa, pregunta a quien administra la red. |
 | Un test falla justo después de cambiar algo | El cambio rompe una regla de la clínica | Lee el nombre del test y el mensaje completo: el propio test dice qué se esperaba. |
@@ -157,7 +157,7 @@ Unas reglas sencillas:
 | GET | `/api/appointments` | RECEPCION |
 | DELETE | `/api/appointments/{id}` | RECEPCION (la cita pasa a CANCELADA) |
 
-La documentación interactiva está en http://localhost:8080/swagger-ui.html y la especificación en `/v3/api-docs`.
+La documentación interactiva está en http://localhost:8765/swagger-ui.html y la especificación en `/v3/api-docs`.
 
 ## Accesos de demo
 

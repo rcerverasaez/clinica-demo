@@ -15,7 +15,7 @@ public class ClinicaDemoApplication {
 
 	private static final Logger log = LoggerFactory.getLogger(ClinicaDemoApplication.class);
 
-	@Value("${server.port:8080}")
+	@Value("${server.port:8765}")
 	private int puerto;
 
 	public static void main(String[] args) {
