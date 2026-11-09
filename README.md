@@ -165,8 +165,9 @@ La documentación interactiva está en http://localhost:8765/swagger-ui.html y l
 |---|---|---|
 | `recepcion` | `recepcion-demo` | RECEPCION |
 | `especialista` | `especialista-demo` | ESPECIALISTA |
+| `vbote@vbote.com` | `vbote-demo` | RECEPCION y ESPECIALISTA |
 
-Son cuentas ficticias de demo. Para cambiarlas, define `CLINICA_RECEPCION_PASSWORD` y `CLINICA_ESPECIALISTA_PASSWORD` antes de arrancar.
+Son cuentas ficticias de demo. Para cambiarlas, define `CLINICA_RECEPCION_PASSWORD` y `CLINICA_ESPECIALISTA_PASSWORD` y `CLINICA_VBOTE_PASSWORD` antes de arrancar.
 
 ## Integración continua
 

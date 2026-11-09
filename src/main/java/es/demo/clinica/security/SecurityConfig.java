@@ -45,9 +45,12 @@ class SecurityConfig {
     @Bean
     UserDetailsService userDetailsService(PasswordEncoder encoder,
             @Value("${clinica.demo.recepcion-password}") String recepcionPassword,
-            @Value("${clinica.demo.especialista-password}") String especialistaPassword) {
+            @Value("${clinica.demo.especialista-password}") String especialistaPassword,
+            @Value("${clinica.demo.vbote-password}") String vbotePassword) {
         return new InMemoryUserDetailsManager(
                 User.withUsername("recepcion").password(encoder.encode(recepcionPassword)).roles("RECEPCION").build(),
-                User.withUsername("especialista").password(encoder.encode(especialistaPassword)).roles("ESPECIALISTA").build());
+                User.withUsername("especialista").password(encoder.encode(especialistaPassword)).roles("ESPECIALISTA").build(),
+                // Usuario de prueba con acceso a recepción y a la agenda
+                User.withUsername("vbote@vbote.com").password(encoder.encode(vbotePassword)).roles("RECEPCION", "ESPECIALISTA").build());
     }
 }

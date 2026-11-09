@@ -1,6 +1,8 @@
 package es.demo.clinica.security;
 
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestBuilders.formLogin;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
+import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.authenticated;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -46,5 +48,11 @@ class SecurityRulesTest {
                 .andExpect(status().isOk());
         mvc.perform(get("/recepcion").with(user("especialista").roles("ESPECIALISTA")))
                 .andExpect(status().isForbidden());
+    }
+
+    @Test
+    void testUserCanLogIn() throws Exception {
+        mvc.perform(formLogin("/login").user("vbote@vbote.com").password("vbote-demo"))
+                .andExpect(authenticated().withRoles("RECEPCION", "ESPECIALISTA"));
     }
 }
