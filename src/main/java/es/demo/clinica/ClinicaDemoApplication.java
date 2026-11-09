@@ -22,10 +22,12 @@ public class ClinicaDemoApplication {
 		SpringApplication.run(ClinicaDemoApplication.class, args);
 	}
 
-	// Al terminar el arranque, muestra la dirección para abrir la aplicación en el navegador
+	// Al terminar el arranque, muestra la dirección para abrirla desde el editor o en Chrome
 	@EventListener(ApplicationReadyEvent.class)
 	public void mostrarDireccion() {
-		log.info("Clínica Demo lista. Ábrela en el navegador: http://localhost:{}", puerto);
+		log.info("Clínica Demo lista.");
+		log.info("Desde el editor (Cmd+clic o Ctrl+clic): http://localhost:{}", puerto);
+		log.info("En Chrome (copia y pega la dirección): http://localhost:{}", puerto);
 	}
 
 }
