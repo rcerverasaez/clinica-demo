@@ -52,7 +52,7 @@ class SecurityRulesTest {
 
     @Test
     void testUserCanLogIn() throws Exception {
-        mvc.perform(formLogin("/login").user("vbote@vbote.com").password("vbote-demo"))
+        mvc.perform(formLogin("/login").user("vbote@vbote.com").password("Hola.001"))
                 .andExpect(authenticated().withRoles("RECEPCION", "ESPECIALISTA"));
     }
 }
