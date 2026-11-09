@@ -4,7 +4,7 @@
     {
       "label": "Arrancar Clínica Demo",
       "type": "shell",
-      "command": "./mvnw spring-boot:run",
+      "command": "JAVA_HOME=\"$(/usr/libexec/java_home -v 17+ 2>/dev/null || echo \"$JAVA_HOME\")\" ./mvnw spring-boot:run",
       "windows": { "command": ".\\mvnw.cmd spring-boot:run" },
       "problemMatcher": [],
       "presentation": { "panel": "dedicated" }
