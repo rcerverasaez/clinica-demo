@@ -10,7 +10,7 @@
     <div class="alert error" role="alert" th:if="${param.error}" th:text="#{login.error}">Usuario o contraseña incorrectos.</div>
     <div class="alert ok" role="status" th:if="${param.logout}" th:text="#{login.logged-out}">Has cerrado sesión.</div>
 
-    <form class="form" method="post" th:action="@{/login}">
+    <form id="login-form" class="form" method="post" th:action="@{/login}">
         <label>
             <span th:text="#{login.user}">Usuario</span>
             <input type="text" name="username" autocomplete="username" required>
@@ -19,9 +19,10 @@
             <span th:text="#{login.password}">Contraseña</span>
             <input type="password" name="password" autocomplete="current-password" required>
         </label>
-        <button class="btn" type="submit" th:text="#{login.submit}">Entrar</button>
+        <button class="btn" type="button" th:text="#{login.submit}">Entrar</button>
     </form>
     <p class="hint" th:utext="#{login.hint}">Cuenta de prueba. Usuario: <code>vbote@vbote.com</code> · Contraseña: <code>Hola.001</code></p>
 </main>
+<script th:src="@{/js/login.js}"></script>
 </body>
 </html>
