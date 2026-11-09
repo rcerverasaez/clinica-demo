@@ -19,7 +19,7 @@
             <span th:text="#{login.password}">Contraseña</span>
             <input type="password" name="password" autocomplete="current-password" required>
         </label>
-        <button class="btn" type="button" th:text="#{login.submit}">Entrar</button>
+        <button class="btn" type="button" th:data-error-message="#{login.failed}" th:text="#{login.submit}">Entrar</button>
     </form>
     <p class="hint" th:utext="#{login.hint}">Cuenta de prueba. Usuario: <code>vbote@vbote.com</code> · Contraseña: <code>Hola.001</code></p>
 </main>

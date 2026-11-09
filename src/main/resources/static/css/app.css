@@ -275,3 +275,16 @@ textarea:focus-visible,
 @media (max-width: 600px) {
     .top nav { gap: 0.5rem 1rem; }
 }
+
+.toast {
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    z-index: 10;
+    max-width: 22rem;
+    padding: 0.85rem 1rem;
+    border-radius: 10px;
+    background: var(--error-bg);
+    color: var(--error-text);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.18);
+}
