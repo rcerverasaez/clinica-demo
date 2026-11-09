@@ -21,8 +21,19 @@ class SecurityRulesTest {
     private MockMvc mvc;
 
     @Test
-    void bookingIsPublic() throws Exception {
-        mvc.perform(get("/reservar")).andExpect(status().isOk());
+    void bookingRequiresLogin() throws Exception {
+        mvc.perform(get("/reservar"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/login"));
+        mvc.perform(get("/reservar").with(user("vbote@vbote.com").roles("RECEPCION")))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void homeRedirectsToLogin() throws Exception {
+        mvc.perform(get("/"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/login"));
     }
 
     @Test

@@ -3,6 +3,7 @@ package es.demo.clinica.web;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.not;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -37,11 +38,11 @@ class PatientControllerTest {
     void theCodeIsSentInTheBodyAndNeverInTheUrl() throws Exception {
         Appointment booked = book();
 
-        mvc.perform(post("/mis-citas").with(csrf()).param("codigo", booked.getCode()))
+        mvc.perform(post("/mis-citas").with(csrf()).with(user("vbote@vbote.com").roles("RECEPCION", "ESPECIALISTA")).param("codigo", booked.getCode()))
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString("Primera visita")));
 
-        mvc.perform(get("/mis-citas").param("codigo", booked.getCode()))
+        mvc.perform(get("/mis-citas").with(user("vbote@vbote.com").roles("RECEPCION", "ESPECIALISTA")).param("codigo", booked.getCode()))
                 .andExpect(status().isOk())
                 .andExpect(content().string(not(containsString("Primera visita"))));
     }
@@ -50,7 +51,7 @@ class PatientControllerTest {
     void theCodeCancelsTheAppointment() throws Exception {
         Appointment booked = book();
 
-        mvc.perform(post("/mis-citas/cancelar").with(csrf()).param("codigo", booked.getCode()))
+        mvc.perform(post("/mis-citas/cancelar").with(csrf()).with(user("vbote@vbote.com").roles("RECEPCION", "ESPECIALISTA")).param("codigo", booked.getCode()))
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString("Tu cita se ha cancelado.")));
     }

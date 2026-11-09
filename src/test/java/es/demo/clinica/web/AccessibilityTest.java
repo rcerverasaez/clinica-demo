@@ -1,6 +1,7 @@
 package es.demo.clinica.web;
 
 import static org.hamcrest.Matchers.containsString;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -21,7 +22,7 @@ class AccessibilityTest {
 
     @Test
     void everyPageHasASkipLinkToTheMainContent() throws Exception {
-        mvc.perform(get("/reservar"))
+        mvc.perform(get("/reservar").with(user("vbote@vbote.com").roles("RECEPCION", "ESPECIALISTA")))
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString("href=\"#contenido\"")))
                 .andExpect(content().string(containsString("<main id=\"contenido\"")));

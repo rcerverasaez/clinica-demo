@@ -69,9 +69,11 @@ En Windows (PowerShell o CMD), utiliza `mvnw.cmd` en lugar de `./mvnw`. La prime
 
 ## Qué incluye
 
+Al abrir la aplicación se muestra la página de acceso (`/login`): hay que iniciar sesión para entrar en cualquier página.
+
 - Inicio con consultas y especialistas (`/`).
-- Reserva pública por huecos libres (`/reservar`): primero se elige consulta, especialista y día, y luego el hueco.
-- «Mis citas» (`/mis-citas`): el paciente consulta o cancela su cita, descarga los documentos de su cita y escribe a recepción. Lo hace con el código de 8 caracteres que recibe al reservar. No necesita cuenta.
+- Reserva por huecos libres (`/reservar`): primero se elige consulta, especialista y día, y luego el hueco.
+- «Mis citas» (`/mis-citas`): el paciente consulta o cancela su cita, descarga los documentos de su cita y escribe a recepción. Lo hace con el código de 8 caracteres que recibe al reservar.
 - Recepción (`/recepcion`, rol RECEPCION): citas próximas con su código, cancelación y conversación con cada paciente. Desde ahí se llega al panel (`/recepcion/panel`), al buzón de recordatorios (`/recepcion/buzon`), al registro de acciones (`/recepcion/auditoria`) y al catálogo (`/recepcion/catalogo`), donde se añaden especialistas y consultas.
 - Agenda del día para el especialista (`/agenda`, rol ESPECIALISTA): marca cada cita como atendida o no presentada, registra ausencias y sube documentos (PDF, JPG o PNG de hasta 2 MB) a cada cita.
 - Reglas de la clínica: horario de 9:00 a 18:00, de lunes a viernes, citas en punto o y media, sin solapes por especialista, sin ausencias del especialista y solo en el futuro.

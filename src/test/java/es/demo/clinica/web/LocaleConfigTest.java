@@ -2,6 +2,7 @@ package es.demo.clinica.web;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -27,7 +28,7 @@ class LocaleConfigTest {
 
     @Test
     void spanishIsTheDefaultLanguage() throws Exception {
-        mvc.perform(get("/reservar"))
+        mvc.perform(get("/reservar").with(user("vbote@vbote.com").roles("RECEPCION", "ESPECIALISTA")))
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString("lang=\"es\"")))
                 .andExpect(content().string(containsString("Reservar cita")))
@@ -36,20 +37,20 @@ class LocaleConfigTest {
 
     @Test
     void langParameterSwitchesToEnglishAndIsRemembered() throws Exception {
-        MvcResult switched = mvc.perform(get("/reservar").param("lang", "en"))
+        MvcResult switched = mvc.perform(get("/reservar").with(user("vbote@vbote.com").roles("RECEPCION", "ESPECIALISTA")).param("lang", "en"))
                 .andExpect(status().isOk())
                 .andExpect(cookie().exists("clinica-idioma"))
                 .andExpect(content().string(containsString("lang=\"en\"")))
                 .andExpect(content().string(containsString("Book appointment")))
                 .andReturn();
 
-        mvc.perform(get("/reservar").cookie(switched.getResponse().getCookie("clinica-idioma")))
+        mvc.perform(get("/reservar").with(user("vbote@vbote.com").roles("RECEPCION", "ESPECIALISTA")).cookie(switched.getResponse().getCookie("clinica-idioma")))
                 .andExpect(content().string(containsString("Book appointment")));
     }
 
     @Test
     void validationMessagesFollowTheLanguage() throws Exception {
-        mvc.perform(post("/reservar").with(csrf()).param("lang", "en"))
+        mvc.perform(post("/reservar").with(csrf()).with(user("vbote@vbote.com").roles("RECEPCION", "ESPECIALISTA")).param("lang", "en"))
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString("Choose a treatment.")));
     }

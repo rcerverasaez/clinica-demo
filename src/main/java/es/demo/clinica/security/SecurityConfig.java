@@ -25,14 +25,14 @@ class SecurityConfig {
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(csrf -> csrf.ignoringRequestMatchers("/api/**"));
         http.authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/", "/reservar", "/login", "/css/**", "/img/**", "/error", "/actuator/health", "/mis-citas", "/mis-citas/**", "/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
+                        .requestMatchers("/login", "/css/**", "/img/**", "/error", "/actuator/health", "/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/treatments", "/api/specialists").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/appointments").permitAll()
                         .requestMatchers("/api/**").hasRole("RECEPCION")
                         .requestMatchers("/recepcion/**").hasRole("RECEPCION")
                         .requestMatchers("/agenda/**").hasRole("ESPECIALISTA")
                         .anyRequest().authenticated())
-                .formLogin(login -> login.loginPage("/login").defaultSuccessUrl("/", false).permitAll())
+                .formLogin(login -> login.loginPage("/login").defaultSuccessUrl("/", true).permitAll())
                 .logout(logout -> logout.logoutSuccessUrl("/"));
         return http.build();
     }
