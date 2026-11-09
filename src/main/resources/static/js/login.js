@@ -23,6 +23,6 @@ loginButton.addEventListener("click", () => {
     submitLogin();
   } catch (error) {
     console.error("Error al iniciar sesión:", error);
-    showToast(loginButton.dataset.errorMessage);
+    showToast(`${loginButton.dataset.errorMessage}: ${error.message}`);
   }
 });
