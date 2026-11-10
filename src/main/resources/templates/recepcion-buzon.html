@@ -11,9 +11,7 @@
 
     <div class="alert ok" role="status" th:if="${sent != null}" th:text="#{outbox.sent(${sent})}">Recordatorios nuevos en el buzón: 0.</div>
 
-    <div class="alert error" id="outbox-error" role="alert" hidden th:text="#{outbox.failed}">Error</div>
-
-    <form id="outbox-form" method="post" th:action="@{/recepcion/buzon/enviar}">
+    <form method="post" th:action="@{/recepcion/buzon/enviar}">
         <button class="btn ghost" type="submit" th:text="#{outbox.prepare}">Preparar recordatorios ahora</button>
     </form>
 
@@ -40,6 +38,5 @@
         </table>
     </div>
 </main>
-<script th:src="@{/js/outbox.js}"></script>
 </body>
 </html>
