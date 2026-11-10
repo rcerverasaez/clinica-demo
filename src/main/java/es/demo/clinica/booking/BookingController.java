@@ -36,7 +36,9 @@ public class BookingController {
             @RequestParam(required = false) String specialistId,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
             @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm") LocalDateTime start,
+            @RequestParam(required = false) String confirmedCode,
             Model model) {
+        addConfirmation(confirmedCode, model);
         BookingForm form = new BookingForm();
         form.setTreatmentId(treatmentId);
         form.setSpecialistId(specialistId);
@@ -67,6 +69,18 @@ public class BookingController {
             model.addAttribute("bookingError", e.getMessage());
             addCatalog(model);
             return "reservar";
+        }
+    }
+
+    // Muestra la confirmación de una cita reservada desde la página
+    private void addConfirmation(String code, Model model) {
+        if (code == null) {
+            return;
+        }
+        try {
+            model.addAttribute("confirmed", appointments.findByCode(code));
+        } catch (BookingException e) {
+            model.addAttribute("bookingError", e.getMessage());
         }
     }
 
